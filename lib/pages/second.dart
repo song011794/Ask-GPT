@@ -12,10 +12,10 @@ class _SecondPageState extends State<SecondPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("第二页"),
+        title: const Text("두 번째 페이지"),
       ),
       body: const Center(
-        child: Text("这是第二个页面"),
+        child: Text("이것은 두 번째 페이지입니다"),
       ),
     );
   }

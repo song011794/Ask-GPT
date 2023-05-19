@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chatgpt/bloc/conversation_bloc.dart';
@@ -49,7 +50,7 @@ class _ConversationWindowState extends State<ConversationWindow> {
                         padding: const EdgeInsets.all(8.0),
                         child: Center(
                           child: Text(
-                            AppLocalizations.of(context)!.noConversationTips,
+                            tr('noConversationTips'),
                             textAlign: TextAlign.center,
                           ),
                         ),
@@ -89,8 +90,7 @@ class _ConversationWindowState extends State<ConversationWindow> {
                       onPressed: () {
                         _showNewConversationDialog(context);
                       },
-                      label:
-                          Text(AppLocalizations.of(context)!.newConversation),
+                      label: Text(tr('newConversation')),
                       icon: const Icon(Icons.add_box),
                     ),
                     TextButton.icon(
@@ -102,7 +102,7 @@ class _ConversationWindowState extends State<ConversationWindow> {
                       onPressed: () {
                         _showSetting(context);
                       },
-                      label: Text(AppLocalizations.of(context)!.settings),
+                      label: Text(tr('settings')),
                       icon: const Icon(Icons.settings),
                     ),
                   ],
@@ -133,11 +133,11 @@ class _ConversationWindowState extends State<ConversationWindow> {
       items: [
         PopupMenuItem(
           value: "delete",
-          child: Text(AppLocalizations.of(context)!.delete),
+          child: Text(tr('delete')),
         ),
         PopupMenuItem(
           value: "rename",
-          child: Text(AppLocalizations.of(context)!.reName),
+          child: Text(tr('reName')),
         ),
       ],
     ).then((value) {
@@ -303,8 +303,10 @@ class _ConversationWindowState extends State<ConversationWindow> {
           TextFormField(
             controller: controllerApiKey,
             decoration: InputDecoration(
-              labelText: AppLocalizations.of(context)!.enterKey,
-              hintText: AppLocalizations.of(context)!.enterKeyTips,
+              labelText: tr('enterKey'),
+              // AppLocalizations.of(context)!.enterKey,
+              hintText: tr('enterKeyTips'),
+              // AppLocalizations.of(context)!.enterKeyTips,
               floatingLabelBehavior: FloatingLabelBehavior.auto,
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -343,8 +345,10 @@ class _ConversationWindowState extends State<ConversationWindow> {
           DropdownButtonFormField(
             value: BlocProvider.of<UserSettingCubit>(context).state.baseUrl,
             decoration: InputDecoration(
-              labelText: AppLocalizations.of(context)!.setProxyUrlTips,
-              hintText: AppLocalizations.of(context)!.setProxyUrlTips,
+              labelText: tr('setProxyUrlTips'),
+              // AppLocalizations.of(context)!.setProxyUrlTips,
+              hintText: tr('setProxyUrlTips'),
+              // AppLocalizations.of(context)!.setProxyUrlTips,
               floatingLabelBehavior: FloatingLabelBehavior.auto,
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -377,8 +381,10 @@ class _ConversationWindowState extends State<ConversationWindow> {
           DropdownButtonFormField(
               value: BlocProvider.of<UserSettingCubit>(context).state.gptModel,
               decoration: InputDecoration(
-                labelText: AppLocalizations.of(context)!.gptModel,
-                hintText: AppLocalizations.of(context)!.gptModel,
+                labelText: tr('gptModel'),
+                // AppLocalizations.of(context)!.gptModel,
+                hintText: tr('gptModel'),
+                // AppLocalizations.of(context)!.gptModel,
                 floatingLabelBehavior: FloatingLabelBehavior.auto,
                 contentPadding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -417,7 +423,9 @@ class _ConversationWindowState extends State<ConversationWindow> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(AppLocalizations.of(context)!.theme),
+                Text(tr('theme')
+                    // AppLocalizations.of(context)!.theme
+                    ),
                 Switch(
                   value: BlocProvider.of<UserSettingCubit>(context)
                           .state
@@ -435,16 +443,11 @@ class _ConversationWindowState extends State<ConversationWindow> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(AppLocalizations.of(context)!.language),
+                Text(tr('language')),
                 Switch(
-                  value: BlocProvider.of<UserSettingCubit>(context)
-                          .state
-                          .locale
-                          .languageCode ==
-                      'zh',
-                  onChanged: (value) {
-                    BlocProvider.of<UserSettingCubit>(context).switchLocale();
-                  },
+                  value: context.locale != const Locale('ko'),
+                  onChanged: (value) => context.setLocale(
+                      value ? const Locale('en') : const Locale('ko')),
                 ),
               ],
             ),
@@ -454,7 +457,9 @@ class _ConversationWindowState extends State<ConversationWindow> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(AppLocalizations.of(context)!.useStreamApi),
+                Text(tr('useStreamApi')
+                    // AppLocalizations.of(context)!.useStreamApi
+                    ),
                 Switch(
                   value: BlocProvider.of<UserSettingCubit>(context)
                       .state
@@ -472,8 +477,10 @@ class _ConversationWindowState extends State<ConversationWindow> {
             DropdownButtonFormField(
               value: BlocProvider.of<UserSettingCubit>(context).state.llm,
               decoration: InputDecoration(
-                labelText: AppLocalizations.of(context)!.llmHint,
-                hintText: AppLocalizations.of(context)!.llmHint,
+                labelText: tr('llmHint'),
+                // AppLocalizations.of(context)!.llmHint,
+                hintText: tr('llmHint'),
+                // AppLocalizations.of(context)!.llmHint,
                 floatingLabelBehavior: FloatingLabelBehavior.auto,
                 contentPadding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -507,7 +514,9 @@ class _ConversationWindowState extends State<ConversationWindow> {
             children.addAll(chatGlMModelSettings(setState));
           }
           return AlertDialog(
-            title: Text(AppLocalizations.of(context)!.settings),
+            title: Text(tr('settings')
+                // AppLocalizations.of(context)!.settings
+                ),
             content: SingleChildScrollView(
               child: SizedBox(
                 width: MediaQuery.of(context).size.width * 0.6,
@@ -526,7 +535,9 @@ class _ConversationWindowState extends State<ConversationWindow> {
                       .setGlmBaseUrl(controllerGlmBaseUrl.text);
                   Navigator.of(context).pop();
                 },
-                child: Text(AppLocalizations.of(context)!.ok),
+                child: Text(tr('ok')
+                    // AppLocalizations.of(context)!.ok
+                    ),
               ),
             ],
           );

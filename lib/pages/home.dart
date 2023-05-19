@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chatgpt/components/chat.dart';
 import 'package:flutter_chatgpt/components/conversation.dart';
@@ -21,7 +22,9 @@ class _MyHomePageState extends State<MyHomePage> {
       key: _scaffoldKey,
       appBar: useTabs
           ? AppBar(
-              title: Text(AppLocalizations.of(context)!.appTitle),
+              title: Text(tr('appTitle')
+                  // AppLocalizations.of(context)!.appTitle
+                  ),
             )
           : null,
       drawer: useTabs ? const ConversationWindow() : null,

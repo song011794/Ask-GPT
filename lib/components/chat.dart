@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -66,7 +67,8 @@ class _ChatWindowState extends State<ChatWindow> {
                               controller: _scrollController,
                               children: const [
                                 Center(
-                                  child: Center(child: Text("正在加载prompts...")),
+                                  child:
+                                      Center(child: Text("Loading prompts...")),
                                 )
                               ]);
                         } else if (state.runtimeType == PromptSuccess) {
@@ -79,7 +81,8 @@ class _ChatWindowState extends State<ChatWindow> {
                               children: const [
                                 Center(
                                   child: Center(
-                                      child: Text("加载prompts列表失败，请检查网络")),
+                                      child: Text(
+                                          "프롬프트 목록을 로드하지 못했습니다. 네트워크를 확인하십시오")),
                                 )
                               ]);
                         }
@@ -101,9 +104,10 @@ class _ChatWindowState extends State<ChatWindow> {
                       child: TextFormField(
                         controller: _controller,
                         decoration: InputDecoration(
-                          labelText: AppLocalizations.of(context)!.inputPrompt,
-                          hintText:
-                              AppLocalizations.of(context)!.inputPromptTips,
+                          labelText: tr('inputPrompt'),
+                          // AppLocalizations.of(context)!.inputPrompt,
+                          hintText: tr('inputPromptTips'),
+                          // AppLocalizations.of(context)!.inputPromptTips,
                           floatingLabelBehavior: FloatingLabelBehavior.auto,
                           contentPadding: const EdgeInsets.symmetric(
                               horizontal: 16, vertical: 8),

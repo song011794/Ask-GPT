@@ -8,7 +8,7 @@ class UserSettingCubit extends Cubit<UserSettingState> with HydratedMixin {
   UserSettingCubit()
       : super(UserSettingState(
             lightTheme,
-            const Locale('en'),
+            const Locale('ko'),
             "",
             "https://api.openai-proxy.com",
             false,
@@ -47,7 +47,7 @@ class UserSettingCubit extends Cubit<UserSettingState> with HydratedMixin {
   void switchLocale() {
     emit(UserSettingState(
         state.themeData,
-        _parseLocale(state.locale.languageCode == 'en' ? 'zh' : 'en'),
+        _parseLocale(state.locale.languageCode == 'en' ? 'ko' : 'en'),
         state.key,
         state.baseUrl,
         state.useStream,
@@ -109,8 +109,8 @@ class UserSettingCubit extends Cubit<UserSettingState> with HydratedMixin {
     switch (locale) {
       case 'en':
         return const Locale('en');
-      case 'zh':
-        return const Locale('zh');
+      case 'ko':
+        return const Locale('ko');
       default:
         return const Locale('en');
     }
