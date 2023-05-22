@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter_chatgpt/repository/conversation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+
 part 'conversation_bloc.freezed.dart';
 part 'conversation_event.dart';
 part 'conversation_state.dart';

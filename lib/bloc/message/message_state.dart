@@ -1,35 +1,46 @@
 part of 'message_bloc.dart';
 
-abstract class MessageState {
-  const MessageState();
+@freezed
+class MessageState with _$MessageState {
+  const factory MessageState.init() = MessageInitial;
+  const factory MessageState.loaded(List<Message> messages) = MessagesLoaded;
+  const factory MessageState.eror(String errorMessage) = MessageError;
+  const factory MessageState.sending() = MessageSending;
+  const factory MessageState.loading() = MessageLoading;
+  const factory MessageState.relaying(Message message) = MessageRelaying;
 }
 
-class MessageInitial extends MessageState {}
 
-class MessagesLoaded extends MessageState {
-  final List<Message> messages;
+// abstract class MessageState {
+//   const MessageState();
+// }
 
-  const MessagesLoaded(
-    this.messages,
-  );
-}
+// class MessageInitial extends MessageState {}
 
-class MessageError extends MessageState {
-  final String errorMessage;
+// class MessagesLoaded extends MessageState {
+//   final List<Message> messages;
 
-  const MessageError(this.errorMessage);
-}
+//   const MessagesLoaded(
+//     this.messages,
+//   );
+// }
 
-class MessageSending extends MessageState {
-  const MessageSending();
-}
+// class MessageError extends MessageState {
+//   final String errorMessage;
 
-class MessageLoading extends MessageState {
-  const MessageLoading();
-}
+//   const MessageError(this.errorMessage);
+// }
 
-/// ChatGPT steaming 回答中
-class MessageRelayingState extends MessageState {
-  final Message message;
-  const MessageRelayingState(this.message);
-}
+// class MessageSending extends MessageState {
+//   const MessageSending();
+// }
+
+// class MessageLoading extends MessageState {
+//   const MessageLoading();
+// }
+
+// /// ChatGPT steaming 回答中
+// class MessageRelayingState extends MessageState {
+//   final Message message;
+//   const MessageRelayingState(this.message);
+// }

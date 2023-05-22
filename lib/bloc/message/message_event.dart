@@ -1,34 +1,41 @@
 part of 'message_bloc.dart';
 
-abstract class MessageEvent extends Equatable {
-  const MessageEvent();
-
-  @override
-  List<Object> get props => [];
+@freezed
+class MessageEvent with _$MessageEvent {
+  const factory MessageEvent.send(Message message) = SendMessageEvent;
+  const factory MessageEvent.delete(Message message) = DeleteMessageEvent;
+  const factory MessageEvent.loadAll(String conversationUUid) = LoadAllMessagesEvent;
 }
 
-class SendMessageEvent extends MessageEvent {
-  final Message message;
+// abstract class MessageEvent extends Equatable {
+//   const MessageEvent();
 
-  const SendMessageEvent(this.message);
+//   @override
+//   List<Object> get props => [];
+// }
 
-  @override
-  List<Object> get props => [message];
-}
+// class SendMessageEvent extends MessageEvent {
+//   final Message message;
 
-class DeleteMessageEvent extends MessageEvent {
-  final Message message;
+//   const SendMessageEvent(this.message);
 
-  const DeleteMessageEvent(this.message);
+//   @override
+//   List<Object> get props => [message];
+// }
 
-  @override
-  List<Object> get props => [message];
-}
+// class DeleteMessageEvent extends MessageEvent {
+//   final Message message;
 
-class LoadAllMessagesEvent extends MessageEvent {
-  final String conversationUUid;
-  const LoadAllMessagesEvent(this.conversationUUid);
+//   const DeleteMessageEvent(this.message);
 
-  @override
-  List<Object> get props => [conversationUUid];
-}
+//   @override
+//   List<Object> get props => [message];
+// }
+
+// class LoadAllMessagesEvent extends MessageEvent {
+//   final String conversationUUid;
+//   const LoadAllMessagesEvent(this.conversationUUid);
+
+//   @override
+//   List<Object> get props => [conversationUUid];
+// }
