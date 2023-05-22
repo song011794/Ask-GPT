@@ -18,8 +18,11 @@ class MessageRepository {
     init();
   }
 
-  void postMessage(Message message, ValueChanged<Message> onResponse,
-      ValueChanged<Message> onError, ValueChanged<Message> onSuccess) async {
+  void postMessage(
+      {required Message message,
+      required ValueChanged<Message> onResponse,
+      required ValueChanged<Message> onError,
+      required ValueChanged<Message> onSuccess}) async {
     List<Message> messages = await ConversationRepository()
         .getMessagesByConversationUUid(message.conversationId);
     _getResponseFromGpt(messages, onResponse, onError, onSuccess);

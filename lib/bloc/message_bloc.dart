@@ -21,19 +21,24 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
       // wait for all the  state emit
       final completer = Completer();
       try {
-        MessageRepository().postMessage(event.message, (Message message) {
-          log("这里发送了多少次数据了${index++}");
-          emit(MessagesLoaded([...messages, message]));
-        }, (Message message) {
-          emit(MessagesLoaded([...messages, message]));
-        }, (Message message) async {
-          // if streaming is done ,load all the message
-          ConversationRepository().addMessage(message);
-          final messages = await ConversationRepository()
-              .getMessagesByConversationUUid(event.message.conversationId);
-          emit(MessagesLoaded(messages));
-          completer.complete();
-        });
+        MessageRepository().postMessage(
+            message: event.message,
+            onResponse: (Message message) {
+              log('Message : ${message.text}');
+              log("这里发送了多少次数据了${index++}");
+              emit(MessagesLoaded([...messages, message]));
+            },
+            onError: (Message message) {
+              emit(MessagesLoaded([...messages, message]));
+            },
+            onSuccess: (Message message) async {
+              // if streaming is done ,load all the message
+              ConversationRepository().addMessage(message);
+              final messages = await ConversationRepository()
+                  .getMessagesByConversationUUid(event.message.conversationId);
+              emit(MessagesLoaded(messages));
+              completer.complete();
+            });
       } catch (e) {
         emit(MessageError(e.toString()));
         completer.complete();

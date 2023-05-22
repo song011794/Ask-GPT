@@ -6,7 +6,6 @@ import 'package:flutter_chatgpt/bloc/message_bloc.dart';
 import 'package:flutter_chatgpt/cubit/setting_cubit.dart';
 import 'package:flutter_chatgpt/repository/conversation.dart';
 import 'package:flutter_chatgpt/utils/package.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ConversationWindow extends StatefulWidget {
   const ConversationWindow({super.key});
@@ -273,8 +272,10 @@ class _ConversationWindowState extends State<ConversationWindow> {
           TextFormField(
             controller: controllerGlmBaseUrl,
             decoration: InputDecoration(
-              labelText: AppLocalizations.of(context)!.gmlBaseUrl,
-              hintText: AppLocalizations.of(context)!.gmlBaseUrl,
+              labelText: tr('gmlBaseUrl'),
+              // AppLocalizations.of(context)!.gmlBaseUrl,
+              hintText: tr('gmlBaseUrl'),
+
               floatingLabelBehavior: FloatingLabelBehavior.auto,
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: 16, vertical: 8),

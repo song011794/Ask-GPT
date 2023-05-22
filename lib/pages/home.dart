@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chatgpt/components/chat.dart';
 import 'package:flutter_chatgpt/components/conversation.dart';
 import 'package:flutter_chatgpt/device/form_factor.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -22,9 +21,7 @@ class _MyHomePageState extends State<MyHomePage> {
       key: _scaffoldKey,
       appBar: useTabs
           ? AppBar(
-              title: Text(tr('appTitle')
-                  // AppLocalizations.of(context)!.appTitle
-                  ),
+              title: Text(tr('appTitle')),
             )
           : null,
       drawer: useTabs ? const ConversationWindow() : null,

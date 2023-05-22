@@ -10,7 +10,6 @@ import 'package:flutter_chatgpt/bloc/prompt_bloc.dart';
 import 'package:flutter_chatgpt/components/markdown.dart';
 import 'package:flutter_chatgpt/device/form_factor.dart';
 import 'package:flutter_chatgpt/repository/conversation.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:uuid/uuid.dart';
 
@@ -188,9 +187,9 @@ class _ChatWindowState extends State<ChatWindow> {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Row(
+          const Row(
             mainAxisAlignment: MainAxisAlignment.end,
-            children: const [
+            children:  [
               FaIcon(FontAwesomeIcons.person),
               SizedBox(
                 width: 5,

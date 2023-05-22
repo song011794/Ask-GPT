@@ -42,17 +42,13 @@ void main() async {
         path: 'assets/translations',
         fallbackLocale: const Locale('ko'),
         startLocale: const Locale('ko'),
-        child: BlocConsumer<UserSettingCubit, UserSettingState>(
-          listener: (context, state) {
-            context.setLocale(state.locale);
-          },
+        child: BlocBuilder<UserSettingCubit, UserSettingState>(
           builder: (context, state) {
             return MaterialApp.router(
               theme: state.themeData,
               routerConfig: gRouter,
               localizationsDelegates: context.localizationDelegates,
               supportedLocales: context.supportedLocales,
-              // locale: BlocProvider.of<UserSettingCubit>(context).state.locale,
               locale: context.locale,
               builder: EasyLoading.init(),
               debugShowCheckedModeBanner: false,
