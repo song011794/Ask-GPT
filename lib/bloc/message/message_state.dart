@@ -1,46 +1,37 @@
 part of 'message_bloc.dart';
 
-@freezed
-class MessageState with _$MessageState {
-  const factory MessageState.init() = MessageInitial;
-  const factory MessageState.loaded(List<Message> messages) = MessagesLoaded;
-  const factory MessageState.eror(String errorMessage) = MessageError;
-  const factory MessageState.sending() = MessageSending;
-  const factory MessageState.loading() = MessageLoading;
-  const factory MessageState.relaying(Message message) = MessageRelaying;
+/// freezed을 사용하면 messages를 업데이트해도 같은 객체로 판단해 state를 변경하지 않는다.
+
+abstract class MessageState {
+  const MessageState();
 }
 
+class MessageInitial extends MessageState {}
 
-// abstract class MessageState {
-//   const MessageState();
-// }
+class MessagesLoaded extends MessageState {
+  final List<Message> messages;
 
-// class MessageInitial extends MessageState {}
+  const MessagesLoaded(
+    this.messages,
+  );
+}
 
-// class MessagesLoaded extends MessageState {
-//   final List<Message> messages;
+class MessageError extends MessageState {
+  final String errorMessage;
 
-//   const MessagesLoaded(
-//     this.messages,
-//   );
-// }
+  const MessageError(this.errorMessage);
+}
 
-// class MessageError extends MessageState {
-//   final String errorMessage;
+class MessageSending extends MessageState {
+  const MessageSending();
+}
 
-//   const MessageError(this.errorMessage);
-// }
+class MessageLoading extends MessageState {
+  const MessageLoading();
+}
 
-// class MessageSending extends MessageState {
-//   const MessageSending();
-// }
-
-// class MessageLoading extends MessageState {
-//   const MessageLoading();
-// }
-
-// /// ChatGPT steaming 回答中
-// class MessageRelayingState extends MessageState {
-//   final Message message;
-//   const MessageRelayingState(this.message);
-// }
+/// ChatGPT steaming 回答中
+class MessageRelayingState extends MessageState {
+  final Message message;
+  const MessageRelayingState(this.message);
+}

@@ -1,10 +1,6 @@
 part of 'prompt_bloc.dart';
 
-abstract class PromptEvent extends Equatable {
-  const PromptEvent();
-
-  @override
-  List<Object> get props => [];
+@freezed
+class PromptEvent with _$PromptEvent{
+  factory PromptEvent.fetch() = PromptFetch;
 }
-
-class PromptFetch extends PromptEvent {}

@@ -45,50 +45,119 @@ class _ChatWindowState extends State<ChatWindow> {
               child: Scrollbar(
                 controller: _scrollController,
                 thumbVisibility: true,
-                child: BlocBuilder<MessageBloc, MessageState>(
+                child: BlocConsumer<MessageBloc, MessageState>(
+                  listener: (context, state) {
+                    print('MessageBloc : $state');
+                  },
                   builder: (context, state) {
                     WidgetsBinding.instance.addPostFrameCallback((_) {
                       _scrollToNewMessage();
                     });
-                    if (state.runtimeType == MessagesLoaded) {
-                      var currentState = state as MessagesLoaded;
-                      return ListView.builder(
-                        controller: _scrollController,
-                        itemCount: currentState.messages.length,
-                        itemBuilder: (context, index) {
-                          return _buildMessageCard(
-                              currentState.messages[index]);
-                        },
-                      );
-                    } else {
-                      return BlocBuilder<PromptBloc, PromptState>(
-                          builder: ((context, state) {
-                        if (state.runtimeType == PromptLoading) {
-                          return ListView(
-                              controller: _scrollController,
-                              children: const [
-                                Center(
-                                  child:
-                                      Center(child: Text("Loading prompts...")),
-                                )
-                              ]);
-                        } else if (state.runtimeType == PromptSuccess) {
-                          PromptSuccess stateSuccess = state as PromptSuccess;
-                          return _buildExpandEmptyListView(
-                              stateSuccess.prompts);
-                        } else {
-                          return ListView(
-                              controller: _scrollController,
-                              children: const [
-                                Center(
-                                  child: Center(
-                                      child: Text(
-                                          "프롬프트 목록을 로드하지 못했습니다. 네트워크를 확인하십시오")),
-                                )
-                              ]);
-                        }
-                      }));
+                    switch (state) {
+                      case MessagesLoaded(:List<Message> messages):
+                        return ListView.builder(
+                          controller: _scrollController,
+                          itemCount: messages.length,
+                          itemBuilder: (context, index) {
+                            return _buildMessageCard(messages[index]);
+                          },
+                        );
+
+                      default:
+                        return BlocBuilder<PromptBloc, PromptState>(
+                            builder: ((context, state) {
+                          switch (state) {
+                            case PromptLoading():
+                              return ListView(
+                                  controller: _scrollController,
+                                  children: const [
+                                    Center(
+                                      child: Center(
+                                          child: Text("Loading prompts...")),
+                                    )
+                                  ]);
+
+                            case PromptSuccess(:List<Prompt> prompts):
+                              return _buildExpandEmptyListView(prompts);
+
+                            default:
+                              return ListView(
+                                  controller: _scrollController,
+                                  children: const [
+                                    Center(
+                                      child: Center(
+                                          child: Text(
+                                              "프롬프트 목록을 로드하지 못했습니다. 네트워크를 확인하십시오")),
+                                    )
+                                  ]);
+                          }
+
+                          // if (state.runtimeType == PromptLoading) {
+                          //   return ListView(
+                          //       controller: _scrollController,
+                          //       children: const [
+                          //         Center(
+                          //           child: Center(
+                          //               child: Text("Loading prompts...")),
+                          //         )
+                          //       ]);
+                          // } else if (state.runtimeType == PromptSuccess) {
+                          //   PromptSuccess stateSuccess = state as PromptSuccess;
+                          //   return _buildExpandEmptyListView(
+                          //       stateSuccess.prompts);
+                          // } else {
+                          //   return ListView(
+                          //       controller: _scrollController,
+                          //       children: const [
+                          //         Center(
+                          //           child: Center(
+                          //               child: Text(
+                          //                   "프롬프트 목록을 로드하지 못했습니다. 네트워크를 확인하십시오")),
+                          //         )
+                          //       ]);
+                          // }
+                        }));
                     }
+
+                    // if (state.runtimeType == MessagesLoaded) {
+                    //   var currentState = state as MessagesLoaded;
+                    //   return ListView.builder(
+                    //     controller: _scrollController,
+                    //     itemCount: currentState.messages.length,
+                    //     itemBuilder: (context, index) {
+                    //       return _buildMessageCard(
+                    //           currentState.messages[index]);
+                    //     },
+                    //   );
+                    // } else {
+                    //   return BlocBuilder<PromptBloc, PromptState>(
+                    //       builder: ((context, state) {
+                    //     if (state.runtimeType == PromptLoading) {
+                    //       return ListView(
+                    //           controller: _scrollController,
+                    //           children: const [
+                    //             Center(
+                    //               child:
+                    //                   Center(child: Text("Loading prompts...")),
+                    //             )
+                    //           ]);
+                    //     } else if (state.runtimeType == PromptSuccess) {
+                    //       PromptSuccess stateSuccess = state as PromptSuccess;
+                    //       return _buildExpandEmptyListView(
+                    //           stateSuccess.prompts);
+                    //     } else {
+                    //       return ListView(
+                    //           controller: _scrollController,
+                    //           children: const [
+                    //             Center(
+                    //               child: Center(
+                    //                   child: Text(
+                    //                       "프롬프트 목록을 로드하지 못했습니다. 네트워크를 확인하십시오")),
+                    //             )
+                    //           ]);
+                    //     }
+                    //   }));
+                    // }
                   },
                 ),
               ),
@@ -191,7 +260,7 @@ class _ChatWindowState extends State<ChatWindow> {
         children: [
           const Row(
             mainAxisAlignment: MainAxisAlignment.end,
-            children:  [
+            children: [
               FaIcon(FontAwesomeIcons.person),
               SizedBox(
                 width: 5,

@@ -7,20 +7,11 @@ class Prompt {
   Prompt(this.act, this.prompt);
 }
 
-abstract class PromptState extends Equatable {
-  const PromptState();
-
-  @override
-  List<Object> get props => [];
+@freezed
+class PromptState with _$PromptState{
+  factory PromptState.init() = PromptInitial;
+  factory PromptState.success(List<Prompt> prompts) = PromptSuccess;
+  factory PromptState.loading() = PromptLoading;
+  factory PromptState.failed() = PromptFailed;
 }
 
-class PromptInitial extends PromptState {}
-
-class PromptSuccess extends PromptState {
-  final List<Prompt> prompts;
-  const PromptSuccess(this.prompts);
-}
-
-class PromptLoading extends PromptState {}
-
-class PromptFailed extends PromptState {}

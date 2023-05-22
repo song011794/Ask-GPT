@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chatgpt/repository/conversation.dart';
 import 'package:flutter_chatgpt/repository/message.dart';
-import 'package:flutter_chatgpt/utils/log.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'message_bloc.freezed.dart';
@@ -13,7 +13,7 @@ part 'message_state.dart';
 class MessageBloc extends Bloc<MessageEvent, MessageState> {
   var index = 1;
 
-  MessageBloc() : super(const MessageInitial()) {
+  MessageBloc() : super( MessageInitial()) {
     on<SendMessageEvent>(_sendMessageEvent);
     on<DeleteMessageEvent>(_deleteMessageEvent);
     on<LoadAllMessagesEvent>(_loadAllMessagesEvent);
@@ -24,14 +24,17 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
     final messages = await ConversationRepository()
         .getMessagesByConversationUUid(event.message.conversationId);
     emit(MessagesLoaded(messages));
-    // wait for all the  state emit
+    // wait for all the  state emi
+
+    List<Message> newListTop = [];
     final completer = Completer();
     try {
       MessageRepository().postMessage(
           message: event.message,
           onResponse: (Message message) {
-            log('Message : ${message.text}');
-            log("这里发送了多少次数据了${index++}");
+            // log('Message : ${message.text}');
+            // log("这里发送了多少次数据了${index++}");
+
             emit(MessagesLoaded([...messages, message]));
           },
           onError: (Message message) {
@@ -72,15 +75,13 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
           .getMessagesByConversationUUid(event.conversationUUid);
       emit(MessagesLoaded(messages));
       if (messages.isEmpty) {
-        emit(const MessageInitial());
+        emit( MessageInitial());
       }
     } catch (e) {
       emit(MessageError(e.toString()));
     }
   }
 }
-
-
 
 // class MessageBloc extends Bloc<MessageEvent, MessageState> {
 //   MessageBloc() : super(MessageInitial()) {
