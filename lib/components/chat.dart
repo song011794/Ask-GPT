@@ -4,14 +4,16 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_chatgpt/bloc/conversation_bloc.dart';
-import 'package:flutter_chatgpt/bloc/message_bloc.dart';
-import 'package:flutter_chatgpt/bloc/prompt_bloc.dart';
+
 import 'package:flutter_chatgpt/components/markdown.dart';
 import 'package:flutter_chatgpt/device/form_factor.dart';
 import 'package:flutter_chatgpt/repository/conversation.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:uuid/uuid.dart';
+
+import '../bloc/conversation/conversation_bloc.dart';
+import '../bloc/message/message_bloc.dart';
+import '../bloc/prompt/prompt_bloc.dart';
 
 var uuid = const Uuid();
 

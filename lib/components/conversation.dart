@@ -1,11 +1,13 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_chatgpt/bloc/conversation_bloc.dart';
-import 'package:flutter_chatgpt/bloc/message_bloc.dart';
+
 import 'package:flutter_chatgpt/cubit/setting_cubit.dart';
 import 'package:flutter_chatgpt/repository/conversation.dart';
 import 'package:flutter_chatgpt/utils/package.dart';
+
+import '../bloc/conversation/conversation_bloc.dart';
+import '../bloc/message/message_bloc.dart';
 
 class ConversationWindow extends StatefulWidget {
   const ConversationWindow({super.key});

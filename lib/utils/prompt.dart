@@ -1,6 +1,8 @@
 import 'dart:convert';
-import 'package:flutter_chatgpt/bloc/prompt_bloc.dart';
+
 import 'package:http/http.dart' as http;
+
+import '../bloc/prompt/prompt_bloc.dart';
 
 const RAW_FILE_URL = "https://raw.githubusercontent.com/";
 const MIRRORF_FILE_URL = "https://raw.fgit.ml/";

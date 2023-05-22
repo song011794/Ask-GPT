@@ -41,7 +41,7 @@ dependencies:
   get_it: ^7.2.0
   path_provider: ^2.0.13
   flutter_easyloading: ^3.0.5
-  freezed: ^2.3.2  
+
   intl: any
   font_awesome_flutter: ^10.4.0
   sqflite: ^2.2.6
@@ -54,6 +54,10 @@ dependencies:
   package_info_plus: ^3.1.2
   easy_localization: ^3.0.2
 
+  # Freezed
+  freezed: ^2.3.4
+  freezed_annotation: ^2.2.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -64,6 +68,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+  build_runner: ^2.4.4
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -74,9 +79,9 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
-  generate: true # Add this line
+  # generate: true # Add this line
 
-   # To add assets to your application, add an assets section, like this:
+  # To add assets to your application, add an assets section, like this:
   assets:
     - assets/translations/
 
