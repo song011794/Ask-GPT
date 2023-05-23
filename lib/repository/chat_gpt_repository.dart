@@ -1,24 +1,46 @@
 import 'package:dart_openai/openai.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter_chatgpt/cubit/setting_cubit.dart';
-import 'package:flutter_chatgpt/repository/conversation.dart';
-import 'package:get_it/get_it.dart';
+import 'package:flutter/material.dart';
 
-abstract class LLM {
-  void getResponse(List<Message> messages, ValueChanged<Message> onResponse,
-      ValueChanged<Message> errorCallback, ValueChanged<Message> onSuccess);
+import 'conversation.dart';
 
-  Future getModelNames();
-}
+class ChatGptRepository {
+  void setGptKey(String apiKey) {
+    OpenAI.apiKey = apiKey;
+  }
 
-class ChatGpt extends LLM {
-  @override
+  void setGptProxy(String baseUrl) {
+    OpenAI.baseUrl = baseUrl;
+  }
+
+  void postMessage({
+    required Message message,
+    required ValueChanged<Message> onResponse,
+    required ValueChanged<Message> onError,
+    required ValueChanged<Message> onSuccess,
+    bool useStream = true,
+    String gptModel = 'gpt-3.5-turbo',
+  }) async {
+    List<Message> messages = await ConversationRepository()
+        .getMessagesByConversationUUid(message.conversationId);
+    getResponse(messages, onResponse, onError, onSuccess, useStream, gptModel);
+  }
+
+  Future<List<String>> getModels() async {
+    List<OpenAIModelModel> models = [];
+    try {
+      models = await OpenAI.instance.model.list(); // 지원하는 모델 리스트 가져오기
+    } catch (e) {}
+
+    return models.map((e) => e.id).toList();
+  }
+
   void getResponse(
-    List<Message> messages,
-    ValueChanged<Message> onResponse,
-    ValueChanged<Message> errorCallback,
-    ValueChanged<Message> onSuccess,
-  ) async {
+      List<Message> messages,
+      ValueChanged<Message> onResponse,
+      ValueChanged<Message> errorCallback,
+      ValueChanged<Message> onSuccess,
+      bool useStream,
+      String gptModel) async {
     List<OpenAIChatCompletionChoiceMessageModel> openAIMessages = [];
     // message 반전
     messages = messages.reversed.toList();
@@ -41,11 +63,9 @@ class ChatGpt extends LLM {
         conversationId: messages.first.conversationId,
         text: "",
         role: Role.assistant); //첫 번째 문자만 문자를 반환합니다.
-    if (GetIt.instance.get<UserSettingCubit>().state.useStream) {
+    if (useStream) {
       Stream<OpenAIStreamChatCompletionModel> chatStream = OpenAI.instance.chat
-          .createStream(
-              model: GetIt.instance.get<UserSettingCubit>().state.gptModel,
-              messages: openAIMessages);
+          .createStream(model: gptModel, messages: openAIMessages);
       chatStream.listen(
         (chatStreamEvent) {
           if (chatStreamEvent.choices.first.delta.content != null) {
@@ -65,7 +85,7 @@ class ChatGpt extends LLM {
     } else {
       try {
         var response = await OpenAI.instance.chat.create(
-          model: GetIt.instance.get<UserSettingCubit>().state.gptModel,
+          model: gptModel,
           messages: openAIMessages,
         );
         message.text = response.choices.first.message.content;
@@ -75,13 +95,5 @@ class ChatGpt extends LLM {
         errorCallback(message);
       }
     }
-  }
-
-  @override
-  Future getModelNames() async {
-    List<OpenAIModelModel> models = await OpenAI.instance.model.list();
-
-    List test = models.map((e) => e.id).toList();
-    print(test);
   }
 }

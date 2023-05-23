@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter_chatgpt/components/markdown.dart';
 import 'package:flutter_chatgpt/device/form_factor.dart';
+import 'package:flutter_chatgpt/repository/chat_gpt_repository.dart';
 import 'package:flutter_chatgpt/repository/conversation.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:uuid/uuid.dart';
@@ -45,10 +46,7 @@ class _ChatWindowState extends State<ChatWindow> {
               child: Scrollbar(
                 controller: _scrollController,
                 thumbVisibility: true,
-                child: BlocConsumer<MessageBloc, MessageState>(
-                  listener: (context, state) {
-                    print('MessageBloc : $state');
-                  },
+                child: BlocBuilder<MessageBloc, MessageState>(
                   builder: (context, state) {
                     WidgetsBinding.instance.addPostFrameCallback((_) {
                       _scrollToNewMessage();
@@ -62,102 +60,36 @@ class _ChatWindowState extends State<ChatWindow> {
                             return _buildMessageCard(messages[index]);
                           },
                         );
-
-                      default:
-                        return BlocBuilder<PromptBloc, PromptState>(
-                            builder: ((context, state) {
-                          switch (state) {
-                            case PromptLoading():
-                              return ListView(
-                                  controller: _scrollController,
-                                  children: const [
-                                    Center(
-                                      child: Center(
-                                          child: Text("Loading prompts...")),
-                                    )
-                                  ]);
-
-                            case PromptSuccess(:List<Prompt> prompts):
-                              return _buildExpandEmptyListView(prompts);
-
-                            default:
-                              return ListView(
-                                  controller: _scrollController,
-                                  children: const [
-                                    Center(
-                                      child: Center(
-                                          child: Text(
-                                              "프롬프트 목록을 로드하지 못했습니다. 네트워크를 확인하십시오")),
-                                    )
-                                  ]);
-                          }
-
-                          // if (state.runtimeType == PromptLoading) {
-                          //   return ListView(
-                          //       controller: _scrollController,
-                          //       children: const [
-                          //         Center(
-                          //           child: Center(
-                          //               child: Text("Loading prompts...")),
-                          //         )
-                          //       ]);
-                          // } else if (state.runtimeType == PromptSuccess) {
-                          //   PromptSuccess stateSuccess = state as PromptSuccess;
-                          //   return _buildExpandEmptyListView(
-                          //       stateSuccess.prompts);
-                          // } else {
-                          //   return ListView(
-                          //       controller: _scrollController,
-                          //       children: const [
-                          //         Center(
-                          //           child: Center(
-                          //               child: Text(
-                          //                   "프롬프트 목록을 로드하지 못했습니다. 네트워크를 확인하십시오")),
-                          //         )
-                          //       ]);
-                          // }
-                        }));
                     }
 
-                    // if (state.runtimeType == MessagesLoaded) {
-                    //   var currentState = state as MessagesLoaded;
-                    //   return ListView.builder(
-                    //     controller: _scrollController,
-                    //     itemCount: currentState.messages.length,
-                    //     itemBuilder: (context, index) {
-                    //       return _buildMessageCard(
-                    //           currentState.messages[index]);
-                    //     },
-                    //   );
-                    // } else {
-                    //   return BlocBuilder<PromptBloc, PromptState>(
-                    //       builder: ((context, state) {
-                    //     if (state.runtimeType == PromptLoading) {
-                    //       return ListView(
-                    //           controller: _scrollController,
-                    //           children: const [
-                    //             Center(
-                    //               child:
-                    //                   Center(child: Text("Loading prompts...")),
-                    //             )
-                    //           ]);
-                    //     } else if (state.runtimeType == PromptSuccess) {
-                    //       PromptSuccess stateSuccess = state as PromptSuccess;
-                    //       return _buildExpandEmptyListView(
-                    //           stateSuccess.prompts);
-                    //     } else {
-                    //       return ListView(
-                    //           controller: _scrollController,
-                    //           children: const [
-                    //             Center(
-                    //               child: Center(
-                    //                   child: Text(
-                    //                       "프롬프트 목록을 로드하지 못했습니다. 네트워크를 확인하십시오")),
-                    //             )
-                    //           ]);
-                    //     }
-                    //   }));
-                    // }
+                    return BlocBuilder<PromptBloc, PromptState>(
+                        builder: ((context, state) {
+                      switch (state) {
+                        case PromptLoading():
+                          return ListView(
+                              controller: _scrollController,
+                              children: const [
+                                Center(
+                                  child:
+                                      Center(child: Text("Loading prompts...")),
+                                )
+                              ]);
+
+                        case PromptSuccess(:List<Prompt> prompts):
+                          return _buildExpandEmptyListView(prompts);
+
+                        default:
+                          return ListView(
+                              controller: _scrollController,
+                              children: const [
+                                Center(
+                                  child: Center(
+                                      child: Text(
+                                          "프롬프트 목록을 로드하지 못했습니다. 네트워크를 확인하십시오")),
+                                )
+                              ]);
+                      }
+                    }));
                   },
                 ),
               ),
@@ -175,9 +107,7 @@ class _ChatWindowState extends State<ChatWindow> {
                         controller: _controller,
                         decoration: InputDecoration(
                           labelText: tr('inputPrompt'),
-                          // AppLocalizations.of(context)!.inputPrompt,
                           hintText: tr('inputPromptTips'),
-                          // AppLocalizations.of(context)!.inputPromptTips,
                           floatingLabelBehavior: FloatingLabelBehavior.auto,
                           contentPadding: const EdgeInsets.symmetric(
                               horizontal: 16, vertical: 8),
@@ -247,7 +177,7 @@ class _ChatWindowState extends State<ChatWindow> {
         conversationId: conversationUuid,
         role: Role.user,
         text: message,
-      );
+      );      
       context.read<MessageBloc>().add(SendMessageEvent(newMessage));
       _formKey.currentState!.reset();
     }

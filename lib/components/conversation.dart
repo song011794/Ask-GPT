@@ -1,13 +1,17 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter_chatgpt/cubit/setting_cubit.dart';
+import 'package:flutter_chatgpt/repository/chat_gpt_repository.dart';
 import 'package:flutter_chatgpt/repository/conversation.dart';
 import 'package:flutter_chatgpt/utils/package.dart';
+import 'package:go_router/go_router.dart';
 
 import '../bloc/conversation/conversation_bloc.dart';
 import '../bloc/message/message_bloc.dart';
+import '../repository/message.dart';
 
 class ConversationWindow extends StatefulWidget {
   const ConversationWindow({super.key});
@@ -17,7 +21,7 @@ class ConversationWindow extends StatefulWidget {
 }
 
 class _ConversationWindowState extends State<ConversationWindow> {
-  bool _isObscure = true;
+  // bool _isObscure = true;
   String version = '1.0.0';
   @override
   void initState() {
@@ -33,83 +37,89 @@ class _ConversationWindowState extends State<ConversationWindow> {
   Widget build(BuildContext context) {
     return BlocBuilder<ConversationBloc, ConversationState>(
       builder: (context, state) {
-        return Container(
-          decoration: BoxDecoration(
-              color: BlocProvider.of<UserSettingCubit>(context)
-                  .state
-                  .themeData
-                  .cardColor,
-              border: const Border(right: BorderSide(width: .3))),
-          constraints: const BoxConstraints(maxWidth: 300),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              state.runtimeType == ConversationInitial ||
-                      state.conversations.isEmpty
-                  ? Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Center(
-                          child: Text(
-                            tr('noConversationTips'),
-                            textAlign: TextAlign.center,
+        return BlocSelector<UserSettingCubit, UserSettingState, Color>(
+          selector: (state) => state.themeData.cardColor,
+          builder: (context, colorState) => Container(
+            decoration: BoxDecoration(
+                color: colorState,
+
+                // BlocProvider.of<UserSettingCubit>(context)
+                //     .state
+                //     .themeData
+                //     .cardColor,
+                border: const Border(right: BorderSide(width: .3))),
+            constraints: const BoxConstraints(maxWidth: 300),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                state.runtimeType == ConversationInitial ||
+                        state.conversations.isEmpty
+                    ? Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Center(
+                            child: Text(
+                              tr('noConversationTips'),
+                              textAlign: TextAlign.center,
+                            ),
                           ),
                         ),
+                      )
+                    : Expanded(
+                        child: ListView.builder(
+                          itemCount: state.conversations.length,
+                          itemBuilder: (context, index) {
+                            return ListTile(
+                              onTap: () {
+                                _tapConversation(index);
+                              },
+                              selected: state.currentConversationUuid ==
+                                  state.conversations[index].uuid,
+                              leading: const Icon(Icons.chat),
+                              title: Text(state.conversations[index].name),
+                              trailing: Builder(builder: (context) {
+                                return IconButton(
+                                    onPressed: () {
+                                      //오버레이 작업 표시
+                                      _showConversationDetail(context, index);
+                                    },
+                                    icon: const Icon(Icons.more_horiz));
+                              }),
+                            );
+                          },
+                        ),
                       ),
-                    )
-                  : Expanded(
-                      child: ListView.builder(
-                        itemCount: state.conversations.length,
-                        itemBuilder: (context, index) {
-                          return ListTile(
-                            onTap: () {
-                              _tapConversation(index);
-                            },
-                            selected: state.currentConversationUuid ==
-                                state.conversations[index].uuid,
-                            leading: const Icon(Icons.chat),
-                            title: Text(state.conversations[index].name),
-                            trailing: Builder(builder: (context) {
-                              return IconButton(
-                                  onPressed: () {
-                                    //显示一个overlay操作
-                                    _showConversationDetail(context, index);
-                                  },
-                                  icon: const Icon(Icons.more_horiz));
-                            }),
-                          );
+                const Divider(thickness: .3),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TextButton.icon(
+                        onPressed: () {
+                          _showNewConversationDialog(context);
                         },
+                        label: Text(tr('newConversation')),
+                        icon: const Icon(Icons.add_box),
                       ),
-                    ),
-              const Divider(thickness: .3),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TextButton.icon(
-                      onPressed: () {
-                        _showNewConversationDialog(context);
-                      },
-                      label: Text(tr('newConversation')),
-                      icon: const Icon(Icons.add_box),
-                    ),
-                    TextButton.icon(
-                      onPressed: () {},
-                      label: Text("Version：$version"),
-                      icon: const Icon(Icons.info),
-                    ),
-                    TextButton.icon(
-                      onPressed: () {
-                        _showSetting(context);
-                      },
-                      label: Text(tr('settings')),
-                      icon: const Icon(Icons.settings),
-                    ),
-                  ],
-                ),
-              )
-            ],
+                      TextButton.icon(
+                        onPressed: () {},
+                        label: Text("Version：$version"),
+                        icon: const Icon(Icons.info),
+                      ),
+                      TextButton.icon(
+                        onPressed: () {
+                          _showSetting(context);
+                          // _showSetting();
+                        },
+                        label: Text(tr('settings')),
+                        icon: const Icon(Icons.settings),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
         );
       },
@@ -265,93 +275,70 @@ class _ConversationWindowState extends State<ConversationWindow> {
 
   void _showSetting(BuildContext context) {
     final TextEditingController controllerApiKey = TextEditingController();
-    final TextEditingController controllerProxy = TextEditingController();
-    final TextEditingController controllerGlmBaseUrl = TextEditingController();
-    List<Widget> chatGlMModelSettings(StateSetter setState) => [
-          const SizedBox(
-            height: 28,
-          ),
-          TextFormField(
-            controller: controllerGlmBaseUrl,
-            decoration: InputDecoration(
-              labelText: tr('gmlBaseUrl'),
-              // AppLocalizations.of(context)!.gmlBaseUrl,
-              hintText: tr('gmlBaseUrl'),
+    FocusNode focusNode = FocusNode();
 
-              floatingLabelBehavior: FloatingLabelBehavior.auto,
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5),
-                borderSide: BorderSide.none,
-              ),
-              filled: true,
-            ),
-            autovalidateMode: AutovalidateMode.always,
-            maxLines: 1,
-            onEditingComplete: () {
-              BlocProvider.of<UserSettingCubit>(context)
-                  .setKey(controllerGlmBaseUrl.text);
-            },
-            onFieldSubmitted: (value) {
-              BlocProvider.of<UserSettingCubit>(context)
-                  .setKey(controllerGlmBaseUrl.text);
-            },
-          ),
-        ];
+    controllerApiKey.text =
+        BlocProvider.of<UserSettingCubit>(context).state.key;
+
+    String froxyUrl = BlocProvider.of<UserSettingCubit>(context).state.baseUrl;
+    String gptModel = BlocProvider.of<UserSettingCubit>(context).state.gptModel;
+
+    ValueNotifier useStreamNotifier = ValueNotifier(
+        BlocProvider.of<UserSettingCubit>(context).state.useStream);
+    ValueNotifier isObscureNotifier = ValueNotifier(true);
+
     List<Widget> openAiModelSettings(StateSetter setState) => [
           const SizedBox(
             height: 28,
           ),
-          TextFormField(
-            controller: controllerApiKey,
-            decoration: InputDecoration(
-              labelText: tr('enterKey'),
-              // AppLocalizations.of(context)!.enterKey,
-              hintText: tr('enterKeyTips'),
-              // AppLocalizations.of(context)!.enterKeyTips,
-              floatingLabelBehavior: FloatingLabelBehavior.auto,
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5),
-                borderSide: BorderSide.none,
-              ),
-              filled: true,
-              suffixIcon: IconButton(
-                icon: Icon(
-                  Icons.remove_red_eye,
-                  color: _isObscure ? Colors.grey : Colors.blue,
+          ValueListenableBuilder(
+            valueListenable: isObscureNotifier,
+            builder: (context, state, child) => TextFormField(
+              controller: controllerApiKey,
+              decoration: InputDecoration(
+                labelText: tr('enterKey'),
+                hintText: tr('enterKeyTips'),
+                floatingLabelBehavior: FloatingLabelBehavior.auto,
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(5),
+                  borderSide: BorderSide.none,
                 ),
-                onPressed: () {
-                  setState(() {
-                    _isObscure = !_isObscure;
-                  });
-                },
+                filled: true,
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    Icons.remove_red_eye,
+                    color: isObscureNotifier.value ? Colors.grey : Colors.blue,
+                  ),
+                  onPressed: () {
+                    isObscureNotifier.value = !isObscureNotifier.value;
+                  },
+                ),
               ),
+              autovalidateMode: AutovalidateMode.always,
+              maxLines: 1,
+              obscureText: isObscureNotifier.value,
+              onEditingComplete: () {
+                context.read<UserSettingCubit>().setKey(controllerApiKey.text);
+              },
+              onFieldSubmitted: (value) {
+                context.read<UserSettingCubit>().setKey(value);
+              },
+              onSaved: (newValue) {
+                context.read<UserSettingCubit>().setKey(newValue ?? '');
+              },
             ),
-            autovalidateMode: AutovalidateMode.always,
-            maxLines: 1,
-            onEditingComplete: () {
-              BlocProvider.of<UserSettingCubit>(context)
-                  .setKey(controllerApiKey.text);
-            },
-            onFieldSubmitted: (value) {
-              BlocProvider.of<UserSettingCubit>(context)
-                  .setKey(controllerApiKey.text);
-            },
-            obscureText: _isObscure,
           ),
           const SizedBox(
             height: 28,
           ),
           DropdownButtonFormField(
+            isExpanded: true,
             value: BlocProvider.of<UserSettingCubit>(context).state.baseUrl,
             decoration: InputDecoration(
               labelText: tr('setProxyUrlTips'),
-              // AppLocalizations.of(context)!.setProxyUrlTips,
               hintText: tr('setProxyUrlTips'),
-              // AppLocalizations.of(context)!.setProxyUrlTips,
               floatingLabelBehavior: FloatingLabelBehavior.auto,
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -363,72 +350,82 @@ class _ConversationWindowState extends State<ConversationWindow> {
             ),
             items: <String>[
               'https://api.openai-proxy.com',
-              'https://inkcast.com',
               'https://api.openai.com'
             ].map<DropdownMenuItem<String>>((String value) {
               return DropdownMenuItem<String>(
                 value: value,
-                child: Text(
-                  value,
+                child: SizedBox(
+                  width: 250,
+                  child: Text(
+                    value,
+                    style: const TextStyle(overflow: TextOverflow.ellipsis),
+                  ),
                 ),
               );
             }).toList(),
             onChanged: (String? newValue) {
               if (newValue == null) return;
-              BlocProvider.of<UserSettingCubit>(context).setProxyUrl(newValue);
+              froxyUrl = newValue;
             },
           ),
           const SizedBox(
             height: 28,
           ),
-          DropdownButtonFormField(
-              value: BlocProvider.of<UserSettingCubit>(context).state.gptModel,
-              decoration: InputDecoration(
-                labelText: tr('gptModel'),
-                // AppLocalizations.of(context)!.gptModel,
-                hintText: tr('gptModel'),
-                // AppLocalizations.of(context)!.gptModel,
-                floatingLabelBehavior: FloatingLabelBehavior.auto,
-                contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(5),
-                  borderSide: BorderSide.none,
-                ),
-                filled: true,
-              ),
-              items: <String>[
-                'gpt-3.5-turbo',
-                'gpt-3.5-turbo-0301',
-              ].map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-              onChanged: (String? newValue) {
-                if (newValue == null) return;
-                BlocProvider.of<UserSettingCubit>(context)
-                    .setGptModel(newValue);
+          FutureBuilder<List<String>>(
+              future: context.read<ChatGptRepository>().getModels(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState != ConnectionState.done) {
+                  return const CircularProgressIndicator();
+                }
+                return DropdownButtonFormField(
+                    isExpanded: true,
+                    value: BlocProvider.of<UserSettingCubit>(context)
+                        .state
+                        .gptModel,
+                    decoration: InputDecoration(
+                      labelText: tr('gptModel'),
+                      hintText: tr('gptModel'),
+                      floatingLabelBehavior: FloatingLabelBehavior.auto,
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        borderSide: BorderSide.none,
+                      ),
+                      filled: true,
+
+                      // constraints: BoxConstraints(maxHeight: 10, maxWidth: 10),
+                    ),
+                    items: snapshot.data!
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: SizedBox(
+                          width: 250,
+                          child: Text(
+                            value,
+                            style: const TextStyle(
+                                overflow: TextOverflow.ellipsis),
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: (String? newValue) {
+                      if (newValue == null) return;
+                      gptModel = newValue;
+                    });
               }),
         ];
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        controllerApiKey.text =
-            BlocProvider.of<UserSettingCubit>(context).state.key;
-        controllerProxy.text =
-            BlocProvider.of<UserSettingCubit>(context).state.baseUrl;
-        controllerGlmBaseUrl.text =
-            BlocProvider.of<UserSettingCubit>(context).state.glmBaseUrl;
         return StatefulBuilder(builder: (context, setState) {
-          var children = [
+          List<Widget> children = [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(tr('theme')
-                    // AppLocalizations.of(context)!.theme
-                    ),
+                Text(tr('theme')),
                 Switch(
                   value: BlocProvider.of<UserSettingCubit>(context)
                           .state
@@ -460,66 +457,27 @@ class _ConversationWindowState extends State<ConversationWindow> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(tr('useStreamApi')
-                    // AppLocalizations.of(context)!.useStreamApi
-                    ),
-                Switch(
-                  value: BlocProvider.of<UserSettingCubit>(context)
-                      .state
-                      .useStream,
-                  onChanged: (value) {
-                    BlocProvider.of<UserSettingCubit>(context)
-                        .setUseStream(value);
-                  },
+                Text(tr('useStreamApi')),
+                ValueListenableBuilder(
+                  valueListenable: useStreamNotifier,
+                  builder: (context, state, child) => Switch(
+                    value: useStreamNotifier.value,
+                    onChanged: (value) {
+                      useStreamNotifier.value = value;
+                    },
+                  ),
                 ),
               ],
             ),
             const SizedBox(
               height: 28,
             ),
-            DropdownButtonFormField(
-              value: BlocProvider.of<UserSettingCubit>(context).state.llm,
-              decoration: InputDecoration(
-                labelText: tr('llmHint'),
-                // AppLocalizations.of(context)!.llmHint,
-                hintText: tr('llmHint'),
-                // AppLocalizations.of(context)!.llmHint,
-                floatingLabelBehavior: FloatingLabelBehavior.auto,
-                contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(5),
-                  borderSide: BorderSide.none,
-                ),
-                filled: true,
-              ),
-              items: <String>['OpenAI', 'ChatGlm', 'IF']
-                  .map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(
-                    value,
-                  ),
-                );
-              }).toList(),
-              onChanged: (String? newValue) {
-                if (newValue == null) return;
-                BlocProvider.of<UserSettingCubit>(context).setLlm(newValue);
-              },
-            ),
           ];
-          if (BlocProvider.of<UserSettingCubit>(context).state.llm ==
-              "OpenAI") {
-            children.addAll(openAiModelSettings(setState));
-          }
-          if (BlocProvider.of<UserSettingCubit>(context).state.llm ==
-              "ChatGlm") {
-            children.addAll(chatGlMModelSettings(setState));
-          }
+
+          children.addAll(openAiModelSettings(setState));
+
           return AlertDialog(
-            title: Text(tr('settings')
-                // AppLocalizations.of(context)!.settings
-                ),
+            title: Text(tr('settings')),
             content: SingleChildScrollView(
               child: SizedBox(
                 width: MediaQuery.of(context).size.width * 0.6,
@@ -530,17 +488,18 @@ class _ConversationWindowState extends State<ConversationWindow> {
             actions: [
               TextButton(
                 onPressed: () {
-                  BlocProvider.of<UserSettingCubit>(context)
-                      .setProxyUrl(controllerProxy.text);
-                  BlocProvider.of<UserSettingCubit>(context)
-                      .setKey(controllerApiKey.text);
-                  BlocProvider.of<UserSettingCubit>(context)
-                      .setGlmBaseUrl(controllerGlmBaseUrl.text);
-                  Navigator.of(context).pop();
+                  print(
+                      'API Key : ${controllerApiKey.text}, FroxyURL : $froxyUrl, GPT Model : $gptModel, UseStream : ${useStreamNotifier.value}');
+
+                  BlocProvider.of<UserSettingCubit>(context).chagneUserSetting(
+                      controllerApiKey.text,
+                      froxyUrl,
+                      gptModel,
+                      useStreamNotifier.value);
+
+                  Navigator.pop(context);
                 },
-                child: Text(tr('ok')
-                    // AppLocalizations.of(context)!.ok
-                    ),
+                child: Text(tr('ok')),
               ),
             ],
           );

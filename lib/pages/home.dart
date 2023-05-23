@@ -27,15 +27,12 @@ class _MyHomePageState extends State<MyHomePage> {
       drawer: useTabs ? const ConversationWindow() : null,
       body: Stack(
         children: [
-          useTabs
-              ? Row(
-                  children: const [
-                    ChatWindow(),
-                  ],
-                )
-              : Row(
-                  children: const [ConversationWindow(), ChatWindow()],
-                ),
+          Row(
+            children: [
+              if (!useTabs) const ConversationWindow(),
+              const ChatWindow()
+            ],
+          ),
         ],
       ),
     );
