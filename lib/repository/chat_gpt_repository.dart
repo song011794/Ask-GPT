@@ -1,6 +1,8 @@
 import 'package:dart_openai/openai.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_chatgpt/utils/log.dart';
 
+import '../utils/chat_gpt_models.dart';
 import 'conversation.dart';
 
 class ChatGptRepository {
@@ -29,9 +31,15 @@ class ChatGptRepository {
     List<OpenAIModelModel> models = [];
     try {
       models = await OpenAI.instance.model.list(); // 지원하는 모델 리스트 가져오기
-    } catch (e) {}
+    } catch (e) {
+      log(e.toString());
+    }
 
-    return models.map((e) => e.id).toList();
+    return models
+        .where((e) => chatModel.contains(e.id))
+        .toList()
+        .map((e) => e.id)
+        .toList();
   }
 
   void getResponse(
