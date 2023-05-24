@@ -5,13 +5,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter_chatgpt/cubit/setting_cubit.dart';
 import 'package:flutter_chatgpt/repository/chat_gpt_repository.dart';
-import 'package:flutter_chatgpt/repository/conversation.dart';
+import 'package:flutter_chatgpt/repository/conversation_repository.dart';
 import 'package:flutter_chatgpt/utils/package.dart';
-import 'package:go_router/go_router.dart';
+
 
 import '../bloc/conversation/conversation_bloc.dart';
 import '../bloc/message/message_bloc.dart';
-import '../repository/message.dart';
+
 
 class ConversationWindow extends StatefulWidget {
   const ConversationWindow({super.key});

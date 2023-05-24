@@ -62,6 +62,7 @@ extension Convert on Role {
   }
 }
 
+
 class ConversationRepository {
   static const String _tableConversationName = 'conversations';
   static const String _tableMessageName = 'messages';
@@ -71,14 +72,7 @@ class ConversationRepository {
   static const String _columnRole = 'role';
   static const String _columnText = 'text';
   static Database? _database;
-  static ConversationRepository? _instance;
-
-  ConversationRepository._internal();
-
-  factory ConversationRepository() {
-    _instance ??= ConversationRepository._internal();
-    return _instance!;
-  }
+    
 
   Future<Database> _getDb() async {
     if (_database == null) {
@@ -126,17 +120,7 @@ class ConversationRepository {
       _tableConversationName,
       conversation.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
-    );
-    // final randomMessage = Message(
-    //   text: conversation.description,
-    //   role: Role.system,
-    //   conversationId: conversation.uuid,
-    // );
-    // await db.insert(
-    //   _tableMessageName,
-    //   randomMessage.toMap(),
-    //   conflictAlgorithm: ConflictAlgorithm.replace,
-    // );
+    );   
   }
 
   Future<void> updateConversation(Conversation conversation) async {

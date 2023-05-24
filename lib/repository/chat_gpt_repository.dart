@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chatgpt/utils/log.dart';
 
 import '../utils/chat_gpt_models.dart';
-import 'conversation.dart';
+import 'conversation_repository.dart';
 
 class ChatGptRepository {
   void setGptKey(String apiKey) {
@@ -26,10 +26,10 @@ class ChatGptRepository {
         .getMessagesByConversationUUid(message.conversationId);
 
     if (chatModel.contains(gptModel)) {
-      getChatResponse(
+      _getChatResponse(
           messages, onResponse, onError, onSuccess, useStream, gptModel);
     } else {
-      getTextResponse(
+      _getTextResponse(
           messages, onResponse, onError, onSuccess, useStream, gptModel);
     }
   }
@@ -53,7 +53,7 @@ class ChatGptRepository {
     return modelNames;
   }
 
-  void getTextResponse(
+  void _getTextResponse(
       List<Message> messages,
       ValueChanged<Message> onResponse,
       ValueChanged<Message> errorCallback,
@@ -116,7 +116,7 @@ class ChatGptRepository {
     }
   }
 
-  void getChatResponse(
+  void _getChatResponse(
       List<Message> messages,
       ValueChanged<Message> onResponse,
       ValueChanged<Message> errorCallback,

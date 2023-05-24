@@ -8,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chatgpt/components/markdown.dart';
 import 'package:flutter_chatgpt/device/form_factor.dart';
 import 'package:flutter_chatgpt/repository/chat_gpt_repository.dart';
-import 'package:flutter_chatgpt/repository/conversation.dart';
+import 'package:flutter_chatgpt/repository/conversation_repository.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:uuid/uuid.dart';
 

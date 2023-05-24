@@ -3,9 +3,7 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chatgpt/cubit/setting_cubit.dart';
 import 'package:flutter_chatgpt/repository/chat_gpt_repository.dart';
-import 'package:flutter_chatgpt/repository/conversation.dart';
-import 'package:flutter_chatgpt/repository/message.dart';
-import 'package:flutter_chatgpt/utils/chat_gpt_models.dart';
+import 'package:flutter_chatgpt/repository/conversation_repository.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'message_bloc.freezed.dart';

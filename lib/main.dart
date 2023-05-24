@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chatgpt/repository/chat_gpt_repository.dart';
+import 'package:flutter_chatgpt/repository/conversation_repository.dart';
 
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_chatgpt/app_bloc_observer.dart';
@@ -25,23 +26,24 @@ void main() async {
   Bloc.observer = const AppBlocObserver();
   PromptBloc promptBloc = PromptBloc();
   promptBloc.add(PromptFetch());
-  runApp(RepositoryProvider(
-      create: (context) => ChatGptRepository(),
+  runApp(MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider(create: (context) => ChatGptRepository()),
+        RepositoryProvider(create: (context) => ConversationRepository()),
+      ],
       child: MultiBlocProvider(
           providers: [
             BlocProvider(
-                create: (context) =>
-                    UserSettingCubit(context.read<ChatGptRepository>()),
-              ),
-          
-            // BlocProvider(
-            //   create: (context) => GetIt.instance.get<UserSettingCubit>(),
-            // ),
+              create: (context) =>
+                  UserSettingCubit(context.read<ChatGptRepository>()),
+            ),         
             BlocProvider(
-              create: (context) => ConversationBloc(),
+              create: (context) => ConversationBloc(context.read<ConversationRepository>()),
             ),
             BlocProvider(
-              create: (context) => MessageBloc(context.read<ChatGptRepository>() ,context.read<UserSettingCubit>()),
+              create: (context) => MessageBloc(
+                  context.read<ChatGptRepository>(),
+                  context.read<UserSettingCubit>()),
             ),
             BlocProvider(
               create: (context) => promptBloc,

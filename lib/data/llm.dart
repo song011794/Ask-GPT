@@ -1,7 +1,7 @@
 import 'package:dart_openai/openai.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_chatgpt/cubit/setting_cubit.dart';
-import 'package:flutter_chatgpt/repository/conversation.dart';
+import 'package:flutter_chatgpt/repository/conversation_repository.dart';
 import 'package:get_it/get_it.dart';
 
 abstract class LLM {
