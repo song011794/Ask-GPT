@@ -1,4 +1,5 @@
 import 'package:dart_openai/openai.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chatgpt/utils/log.dart';
 
@@ -94,7 +95,8 @@ class ChatGptRepository {
           onResponse(message);
         },
         onError: (error) {
-          message.text = error.message;
+          message.text =
+              error.message.isEmpty ? tr('checkApiKey') : error.message;
           errorCallback(message);
         },
         onDone: () {
@@ -157,7 +159,8 @@ class ChatGptRepository {
           }
         },
         onError: (error) {
-          message.text = error.message;
+          message.text =
+              error.message.isEmpty ? tr('checkApiKey') : error.message;
           errorCallback(message);
         },
         onDone: () {

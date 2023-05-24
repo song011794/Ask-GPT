@@ -6,7 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter_chatgpt/components/markdown.dart';
-import 'package:flutter_chatgpt/device/form_factor.dart';
 import 'package:flutter_chatgpt/repository/conversation_repository.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:uuid/uuid.dart';
@@ -16,8 +15,10 @@ import '../bloc/message/message_bloc.dart';
 
 var uuid = const Uuid();
 
+
 class ChatWindow extends StatefulWidget {
-  const ChatWindow({super.key});
+    // ignore: prefer_const_constructors_in_immutables
+    ChatWindow({super.key});
 
   @override
   State<ChatWindow> createState() => _ChatWindowState();
@@ -25,11 +26,11 @@ class ChatWindow extends StatefulWidget {
 
 class _ChatWindowState extends State<ChatWindow> {
   final _controller = TextEditingController();
-  final _formKey = GlobalKey<FormState>(); // 定义一个 GlobalKey
+  final _formKey = GlobalKey<FormState>(); 
   final _scrollController = ScrollController();
 
   @override
-  void initState() {
+  void initState() {    
     super.initState();
   }
 
@@ -73,7 +74,7 @@ class _ChatWindowState extends State<ChatWindow> {
             ),
             const SizedBox(height: 16),
             Form(
-              key: _formKey, // 将 GlobalKey 赋值给 Form 组件的 key 属性
+              key: _formKey, 
               child: RawKeyboardListener(
                 focusNode: FocusNode(),
                 onKey: _handleKeyEvent,
@@ -83,8 +84,10 @@ class _ChatWindowState extends State<ChatWindow> {
                       child: TextFormField(
                         controller: _controller,
                         decoration: InputDecoration(
-                          labelText: tr('inputPrompt'),
+                          label: Text(tr('inputPrompt')),
+                          // labelText: tr('inputPrompt'),
                           hintText: tr('inputPromptTips'),
+                          
                           floatingLabelBehavior: FloatingLabelBehavior.auto,
                           contentPadding: const EdgeInsets.symmetric(
                               horizontal: 16, vertical: 8),
@@ -211,7 +214,12 @@ class _ChatWindowState extends State<ChatWindow> {
               const SizedBox(
                 width: 10,
               ),
-              const FaIcon(FontAwesomeIcons.robot),
+              // const FaIcon(FontAwesomeIcons.robot),
+              Image.asset(
+                'assets/icon/icon.png',
+                width: 30,
+                height: 30,
+              ),
               const SizedBox(
                 width: 5,
               ),

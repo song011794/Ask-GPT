@@ -4,6 +4,7 @@
   "noConversationTips": "There seems to be no session, click on the left to create one quickly, or simply type prompt to create one",
   "newConversation": "New Conversation",
   "renameConversation": "Rename Conversation",
+  "setRenameConversation": "Enter the new name",
   "settings": "Settings",
   "language": "switch language",
   "delete": "Delete",
@@ -18,5 +19,6 @@
   "ok": "OK",
   "cancel": "Cancel",
   "useStreamApi": "Use Stream API",
-  "gptModel": "Select GPT Model"
+  "gptModel": "Select GPT Model",
+  "checkApiKey" : "The API Key does not match.\nPlease issue a Key at https://platform.openai.com/account/api-keys"
 }

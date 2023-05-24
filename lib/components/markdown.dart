@@ -10,7 +10,7 @@ class Markdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final config =
+    final MarkdownConfig config =
         isDark ? MarkdownConfig.darkConfig : MarkdownConfig.defaultConfig;
     codeWrapper(child, text) => CodeWrapperWidget(child: child, text: text);
     return SelectionArea(
@@ -22,7 +22,7 @@ class Markdown extends StatelessWidget {
             children: MarkdownGenerator(
               inlineSyntaxes: [LatexSyntax()],
               generators: [latexGenerator],
-              config: config.copy(configs: [
+              config: config.copy(configs: [                
                 isDark
                     ? PreConfig.darkConfig.copy(wrapper: codeWrapper)
                     : const PreConfig().copy(wrapper: codeWrapper),

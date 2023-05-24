@@ -37,9 +37,11 @@ class _MyHomePageState extends State<MyHomePage> {
                               false, // optional. Shows phone code before the country name.
 
                           onSelect: (Country country) async {
-                            await context.setLocale(country.countryCode == 'KR'
-                                ? const Locale('ko')
-                                : const Locale('en'));
+                            setState(() {
+                              context.setLocale(country.countryCode == 'KR'
+                                  ? const Locale('ko')
+                                  : const Locale('en'));
+                            });
                           },
                         );
                       },
@@ -60,7 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
             Row(
               children: [
                 if (!useTabs) const ConversationWindow(),
-                const ChatWindow()
+                ChatWindow()
               ],
             ),
           ],

@@ -173,15 +173,15 @@ class _ConversationWindowState extends State<ConversationWindow> {
             .conversations[index]
             .name;
         return AlertDialog(
-          title: const Text("Rename Conversation"),
+          title:  Text(tr('renameConversation')),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextFormField(
                 controller: controller,
                 decoration: InputDecoration(
-                  labelText: 'Enter the new name',
-                  hintText: 'Enter the new name',
+                  labelText: tr('setRenameConversation'),
+                  hintText: tr('setRenameConversation'),
                   floatingLabelBehavior: FloatingLabelBehavior.auto,
                   contentPadding:
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -382,9 +382,7 @@ class _ConversationWindowState extends State<ConversationWindow> {
                         borderRadius: BorderRadius.circular(5),
                         borderSide: BorderSide.none,
                       ),
-                      filled: true,
-
-                      // constraints: BoxConstraints(maxHeight: 10, maxWidth: 10),
+                      filled: true,                    
                     ),
                     items: snapshot.data!
                         .map<DropdownMenuItem<String>>((String value) {
