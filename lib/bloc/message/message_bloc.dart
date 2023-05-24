@@ -5,6 +5,7 @@ import 'package:flutter_chatgpt/cubit/setting_cubit.dart';
 import 'package:flutter_chatgpt/repository/chat_gpt_repository.dart';
 import 'package:flutter_chatgpt/repository/conversation.dart';
 import 'package:flutter_chatgpt/repository/message.dart';
+import 'package:flutter_chatgpt/utils/chat_gpt_models.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'message_bloc.freezed.dart';
@@ -49,23 +50,6 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
         useStream: _userSettingCubit.state.useStream,
         gptModel: _userSettingCubit.state.gptModel,
       );
-
-      // MessageRepository().postMessage(
-      //     message: event.message,
-      //     onResponse: (Message message) {
-      //       emit(MessagesLoaded([...messages, message]));
-      //     },
-      //     onError: (Message message) {
-      //       emit(MessagesLoaded([...messages, message]));
-      //     },
-      //     onSuccess: (Message message) async {
-      //       // if streaming is done ,load all the message
-      //       ConversationRepository().addMessage(message);
-      //       final messages = await ConversationRepository()
-      //           .getMessagesByConversationUUid(event.message.conversationId);
-      //       emit(MessagesLoaded(messages));
-      //       completer.complete();
-      //     });
     } catch (e) {
       emit(MessageError(e.toString()));
       completer.complete();

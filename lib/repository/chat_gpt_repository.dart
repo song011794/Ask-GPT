@@ -24,7 +24,14 @@ class ChatGptRepository {
   }) async {
     List<Message> messages = await ConversationRepository()
         .getMessagesByConversationUUid(message.conversationId);
-    getResponse(messages, onResponse, onError, onSuccess, useStream, gptModel);
+
+    if (chatModel.contains(gptModel)) {
+      getChatResponse(
+          messages, onResponse, onError, onSuccess, useStream, gptModel);
+    } else {
+      getTextResponse(
+          messages, onResponse, onError, onSuccess, useStream, gptModel);
+    }
   }
 
   Future<List<String>> getModels() async {
@@ -35,14 +42,81 @@ class ChatGptRepository {
       log(e.toString());
     }
 
-    return models
-        .where((e) => chatModel.contains(e.id))
+    List<String> modelNames = models
+        .where((e) => chatModel.contains(e.id) || textModel.contains(e.id))
         .toList()
         .map((e) => e.id)
         .toList();
+
+    modelNames.sort();
+
+    return modelNames;
   }
 
-  void getResponse(
+  void getTextResponse(
+      List<Message> messages,
+      ValueChanged<Message> onResponse,
+      ValueChanged<Message> errorCallback,
+      ValueChanged<Message> onSuccess,
+      bool useStream,
+      String gptModel) async {
+    List<OpenAIChatCompletionChoiceMessageModel> openAIMessages = [];
+    // message 반전
+    messages = messages.reversed.toList();
+    // 메시지에서 각 메시지의 내용을 꺼내 함께 연결
+    String content = "";
+    for (Message message in messages) {
+      content = content + message.text;
+      if (content.length < 1800 || openAIMessages.isEmpty) {
+        // openAIMessages 첫 번째 위치에 삽입
+        openAIMessages.insert(
+          0,
+          OpenAIChatCompletionChoiceMessageModel(
+            content: message.text,
+            role: message.role.asOpenAIChatMessageRole,
+          ),
+        );
+      }
+    }
+
+    var message = Message(
+        conversationId: messages.first.conversationId,
+        text: "",
+        role: Role.assistant);
+
+    if (useStream) {
+      Stream<OpenAIStreamCompletionModel> textStream = OpenAI
+          .instance.completion
+          .createStream(model: gptModel, prompt: messages.first.text);
+      textStream.listen(
+        (textStreamEvent) {
+          message.text += textStreamEvent.choices.first.text;
+          onResponse(message);
+        },
+        onError: (error) {
+          message.text = error.message;
+          errorCallback(message);
+        },
+        onDone: () {
+          onSuccess(message);
+        },
+      );
+    } else {
+      try {
+        var response = await OpenAI.instance.completion.create(
+          model: gptModel,
+          prompt: messages.first.text,
+        );
+        message.text += response.choices.first.text;
+        onSuccess(message);
+      } catch (e) {
+        message.text = e.toString();
+        errorCallback(message);
+      }
+    }
+  }
+
+  void getChatResponse(
       List<Message> messages,
       ValueChanged<Message> onResponse,
       ValueChanged<Message> errorCallback,
