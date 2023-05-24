@@ -1,6 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter_chatgpt/cubit/setting_cubit.dart';
@@ -8,10 +7,8 @@ import 'package:flutter_chatgpt/repository/chat_gpt_repository.dart';
 import 'package:flutter_chatgpt/repository/conversation_repository.dart';
 import 'package:flutter_chatgpt/utils/package.dart';
 
-
 import '../bloc/conversation/conversation_bloc.dart';
 import '../bloc/message/message_bloc.dart';
-
 
 class ConversationWindow extends StatefulWidget {
   const ConversationWindow({super.key});
@@ -21,7 +18,6 @@ class ConversationWindow extends StatefulWidget {
 }
 
 class _ConversationWindowState extends State<ConversationWindow> {
-  // bool _isObscure = true;
   String version = '1.0.0';
   @override
   void initState() {
@@ -42,11 +38,6 @@ class _ConversationWindowState extends State<ConversationWindow> {
           builder: (context, colorState) => Container(
             decoration: BoxDecoration(
                 color: colorState,
-
-                // BlocProvider.of<UserSettingCubit>(context)
-                //     .state
-                //     .themeData
-                //     .cardColor,
                 border: const Border(right: BorderSide(width: .3))),
             constraints: const BoxConstraints(maxWidth: 300),
             child: Column(
@@ -275,7 +266,6 @@ class _ConversationWindowState extends State<ConversationWindow> {
 
   void _showSetting(BuildContext context) {
     final TextEditingController controllerApiKey = TextEditingController();
-    FocusNode focusNode = FocusNode();
 
     controllerApiKey.text =
         BlocProvider.of<UserSettingCubit>(context).state.key;
@@ -425,38 +415,6 @@ class _ConversationWindowState extends State<ConversationWindow> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(tr('theme')),
-                Switch(
-                  value: BlocProvider.of<UserSettingCubit>(context)
-                          .state
-                          .themeData ==
-                      darkTheme,
-                  onChanged: (value) {
-                    BlocProvider.of<UserSettingCubit>(context).switchTheme();
-                  },
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 28,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(tr('language')),
-                Switch(
-                  value: context.locale != const Locale('ko'),
-                  onChanged: (value) => context.setLocale(
-                      value ? const Locale('en') : const Locale('ko')),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 28,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
                 Text(tr('useStreamApi')),
                 ValueListenableBuilder(
                   valueListenable: useStreamNotifier,
@@ -488,9 +446,6 @@ class _ConversationWindowState extends State<ConversationWindow> {
             actions: [
               TextButton(
                 onPressed: () {
-                  print(
-                      'API Key : ${controllerApiKey.text}, FroxyURL : $froxyUrl, GPT Model : $gptModel, UseStream : ${useStreamNotifier.value}');
-
                   BlocProvider.of<UserSettingCubit>(context).chagneUserSetting(
                       controllerApiKey.text,
                       froxyUrl,

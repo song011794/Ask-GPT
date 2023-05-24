@@ -7,14 +7,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter_chatgpt/components/markdown.dart';
 import 'package:flutter_chatgpt/device/form_factor.dart';
-import 'package:flutter_chatgpt/repository/chat_gpt_repository.dart';
 import 'package:flutter_chatgpt/repository/conversation_repository.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:uuid/uuid.dart';
 
 import '../bloc/conversation/conversation_bloc.dart';
 import '../bloc/message/message_bloc.dart';
-import '../bloc/prompt/prompt_bloc.dart';
 
 var uuid = const Uuid();
 
@@ -62,34 +60,13 @@ class _ChatWindowState extends State<ChatWindow> {
                         );
                     }
 
-                    return BlocBuilder<PromptBloc, PromptState>(
-                        builder: ((context, state) {
-                      switch (state) {
-                        case PromptLoading():
-                          return ListView(
-                              controller: _scrollController,
-                              children: const [
-                                Center(
-                                  child:
-                                      Center(child: Text("Loading prompts...")),
-                                )
-                              ]);
-
-                        case PromptSuccess(:List<Prompt> prompts):
-                          return _buildExpandEmptyListView(prompts);
-
-                        default:
-                          return ListView(
-                              controller: _scrollController,
-                              children: const [
-                                Center(
-                                  child: Center(
-                                      child: Text(
-                                          "프롬프트 목록을 로드하지 못했습니다. 네트워크를 확인하십시오")),
-                                )
-                              ]);
-                      }
-                    }));
+                    return ListView.builder(
+                      controller: _scrollController,
+                      itemCount: 0,
+                      itemBuilder: (context, index) {
+                        return Container();
+                      },
+                    );
                   },
                 ),
               ),
@@ -177,7 +154,7 @@ class _ChatWindowState extends State<ChatWindow> {
         conversationId: conversationUuid,
         role: Role.user,
         text: message,
-      );      
+      );
       context.read<MessageBloc>().add(SendMessageEvent(newMessage));
       _formKey.currentState!.reset();
     }
@@ -271,92 +248,92 @@ class _ChatWindowState extends State<ChatWindow> {
     }
   }
 
-  Widget _buildExpandEmptyListView(List<Prompt> prompts) {
-    if (MediaQuery.of(context).size.width > FormFactor.tablet) {
-      return GridView.builder(
-        controller: _scrollController,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-        ),
-        itemCount: prompts.length,
-        itemBuilder: (BuildContext context, int index) {
-          return GestureDetector(
-            onTap: () => {_controller.text = (prompts[index].prompt)},
-            child: Container(
-              margin: const EdgeInsets.all(8),
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: getRandomColor() as Color,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    prompts[index].act,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.fade,
-                  ),
-                  const SizedBox(height: 10),
-                  Expanded(
-                    child: Text(
-                      prompts[index].prompt,
-                      style: const TextStyle(
-                        fontSize: 16,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 4,
-                    ),
-                  )
-                ],
-              ),
-            ),
-          );
-        },
-      );
-    } else {
-      return ListView.builder(
-        controller: _scrollController,
-        itemCount: prompts.length,
-        itemBuilder: (BuildContext context, int index) {
-          return GestureDetector(
-            onTap: () => {_controller.text = prompts[index].prompt},
-            child: Container(
-              margin: const EdgeInsets.all(8),
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: getRandomColor() as Color,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    prompts[index].act,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    prompts[index].prompt,
-                    style: const TextStyle(
-                      fontSize: 16,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
-      );
-    }
-  }
+  // Widget _buildExpandEmptyListView(List<Prompt> prompts) {
+  //   if (MediaQuery.of(context).size.width > FormFactor.tablet) {
+  //     return GridView.builder(
+  //       controller: _scrollController,
+  //       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+  //         crossAxisCount: 3,
+  //       ),
+  //       itemCount: prompts.length,
+  //       itemBuilder: (BuildContext context, int index) {
+  //         return GestureDetector(
+  //           onTap: () => {_controller.text = (prompts[index].prompt)},
+  //           child: Container(
+  //             margin: const EdgeInsets.all(8),
+  //             padding: const EdgeInsets.all(8),
+  //             decoration: BoxDecoration(
+  //               color: getRandomColor() as Color,
+  //               borderRadius: BorderRadius.circular(8),
+  //             ),
+  //             child: Column(
+  //               mainAxisAlignment: MainAxisAlignment.center,
+  //               children: [
+  //                 Text(
+  //                   prompts[index].act,
+  //                   style: const TextStyle(
+  //                     fontSize: 20,
+  //                     fontWeight: FontWeight.bold,
+  //                   ),
+  //                   maxLines: 1,
+  //                   overflow: TextOverflow.fade,
+  //                 ),
+  //                 const SizedBox(height: 10),
+  //                 Expanded(
+  //                   child: Text(
+  //                     prompts[index].prompt,
+  //                     style: const TextStyle(
+  //                       fontSize: 16,
+  //                     ),
+  //                     overflow: TextOverflow.ellipsis,
+  //                     maxLines: 4,
+  //                   ),
+  //                 )
+  //               ],
+  //             ),
+  //           ),
+  //         );
+  //       },
+  //     );
+  //   } else {
+  //     return ListView.builder(
+  //       controller: _scrollController,
+  //       itemCount: prompts.length,
+  //       itemBuilder: (BuildContext context, int index) {
+  //         return GestureDetector(
+  //           onTap: () => {_controller.text = prompts[index].prompt},
+  //           child: Container(
+  //             margin: const EdgeInsets.all(8),
+  //             padding: const EdgeInsets.all(8),
+  //             decoration: BoxDecoration(
+  //               color: getRandomColor() as Color,
+  //               borderRadius: BorderRadius.circular(8),
+  //             ),
+  //             child: Column(
+  //               mainAxisAlignment: MainAxisAlignment.center,
+  //               children: [
+  //                 Text(
+  //                   prompts[index].act,
+  //                   style: const TextStyle(
+  //                     fontSize: 20,
+  //                     fontWeight: FontWeight.bold,
+  //                   ),
+  //                 ),
+  //                 const SizedBox(height: 10),
+  //                 Text(
+  //                   prompts[index].prompt,
+  //                   style: const TextStyle(
+  //                     fontSize: 16,
+  //                   ),
+  //                 ),
+  //               ],
+  //             ),
+  //           ),
+  //         );
+  //       },
+  //     );
+  //   }
+  // }
 }
 
 List<Color?> sMaterialColor = [

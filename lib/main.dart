@@ -8,24 +8,20 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_chatgpt/app_bloc_observer.dart';
 import 'package:flutter_chatgpt/cubit/setting_cubit.dart';
 import 'package:flutter_chatgpt/route.dart';
-import 'package:get_it/get_it.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'bloc/conversation/conversation_bloc.dart';
 import 'bloc/message/message_bloc.dart';
-import 'bloc/prompt/prompt_bloc.dart';
-import 'data/llm.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
   HydratedBloc.storage = await HydratedStorage.build(
       storageDirectory: await getApplicationDocumentsDirectory());
-  // GetIt.instance.registerSingleton<UserSettingCubit>(UserSettingCubit());
+
   Bloc.observer = const AppBlocObserver();
-  PromptBloc promptBloc = PromptBloc();
-  promptBloc.add(PromptFetch());
+
   runApp(MultiRepositoryProvider(
       providers: [
         RepositoryProvider(create: (context) => ChatGptRepository()),
@@ -36,17 +32,15 @@ void main() async {
             BlocProvider(
               create: (context) =>
                   UserSettingCubit(context.read<ChatGptRepository>()),
-            ),         
+            ),
             BlocProvider(
-              create: (context) => ConversationBloc(context.read<ConversationRepository>()),
+              create: (context) =>
+                  ConversationBloc(context.read<ConversationRepository>()),
             ),
             BlocProvider(
               create: (context) => MessageBloc(
                   context.read<ChatGptRepository>(),
                   context.read<UserSettingCubit>()),
-            ),
-            BlocProvider(
-              create: (context) => promptBloc,
             ),
           ],
           child: EasyLocalization(
