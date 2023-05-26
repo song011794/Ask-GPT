@@ -14,4 +14,4 @@
 - [x] Completion
 - [x] Chat
 
-<img src="https://github.com/song011794/Flutter-chat-box/tree/main/artificial/theme.gif"  style="width: 80%;">
+<img src="./artificial/theme.gif"" style="width: 80%;">
