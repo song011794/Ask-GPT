@@ -9,3 +9,9 @@
 - [x] text-curie-001
 - [x] text-ada-001
 
+# 지원 기능
+
+- [x] Completion
+- [x] Chat 
+
+
