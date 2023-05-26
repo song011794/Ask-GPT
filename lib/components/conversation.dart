@@ -368,8 +368,7 @@ class _ConversationWindowState extends State<ConversationWindow> {
           ),
           ValueListenableBuilder(
               valueListenable: asd,
-              builder: (context, value, child) {
-                print(value.length);
+              builder: (context, value, child) {             
                 if (value.length != 51) {
                   return DropdownButtonFormField(
                       isExpanded: true,

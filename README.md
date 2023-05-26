@@ -12,6 +12,6 @@
 # 지원 기능
 
 - [x] Completion
-- [x] Chat 
+- [x] Chat
 
-
+<img src="https://github.com/song011794/flutter_chat_box/blob/main/artificial/theme.gif"  style="width: 80%;">
