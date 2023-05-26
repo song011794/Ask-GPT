@@ -16,11 +16,10 @@ jobs:
       - run: flutter pub get
       #     - run: flutter test
       - run: flutter build apk
-      - uses: actions/upload-artifact@v3
-        with:
-          # name: flutter_chat_box.apk
-          name: app-release.apk
-          path: "build/app/outputs/apk/release/*.apk"
+      # - uses: actions/upload-artifact@v3
+      #   with:
+      #     name: flutter_chat_box.apk    
+      #     path: "build/app/outputs/apk/release/*.apk"
 
   build-ios:
     name: Build iOS app
@@ -34,10 +33,10 @@ jobs:
       - run: flutter pub get
       #       - run: flutter test
       - run: flutter build ios --release --no-codesign
-      - uses: actions/upload-artifact@v3
-        with:
-          name: flutter_chat_box.ipa
-          path: build/ios/Release-iphoneos/*.app
+      # - uses: actions/upload-artifact@v3
+      #   with:
+      #     name: flutter_chat_box.ipa
+      #     path: build/ios/Release-iphoneos/*.app
 
   # build-windows:
   #   name: Build Windows app
@@ -61,7 +60,7 @@ jobs:
           architecture: x64
       - run: flutter config --enable-macos-desktop
       - run: flutter build macos
-      - uses: actions/upload-artifact@v3
-        with:
-          name: flutter_chat_box.app
-          path: build/macos/Build/Products/Release/*.app
+      # - uses: actions/upload-artifact@v3
+      #   with:
+      #     name: flutter_chat_box.app
+      #     path: build/macos/Build/Products/Release/*.app

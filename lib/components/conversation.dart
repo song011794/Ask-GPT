@@ -1,3 +1,4 @@
+import 'package:dart_openai/openai.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,9 +7,11 @@ import 'package:flutter_chatgpt/cubit/setting_cubit.dart';
 import 'package:flutter_chatgpt/repository/chat_gpt_repository.dart';
 import 'package:flutter_chatgpt/repository/conversation_repository.dart';
 import 'package:flutter_chatgpt/utils/package.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 import '../bloc/conversation/conversation_bloc.dart';
 import '../bloc/message/message_bloc.dart';
+import 'package:async/async.dart';
 
 class ConversationWindow extends StatefulWidget {
   const ConversationWindow({super.key});
@@ -19,6 +22,7 @@ class ConversationWindow extends StatefulWidget {
 
 class _ConversationWindowState extends State<ConversationWindow> {
   String version = '1.0.0';
+
   @override
   void initState() {
     super.initState();
@@ -101,7 +105,6 @@ class _ConversationWindowState extends State<ConversationWindow> {
                       TextButton.icon(
                         onPressed: () {
                           _showSetting(context);
-                          // _showSetting();
                         },
                         label: Text(tr('settings')),
                         icon: const Icon(Icons.settings),
@@ -173,7 +176,7 @@ class _ConversationWindowState extends State<ConversationWindow> {
             .conversations[index]
             .name;
         return AlertDialog(
-          title:  Text(tr('renameConversation')),
+          title: Text(tr('renameConversation')),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -265,6 +268,12 @@ class _ConversationWindowState extends State<ConversationWindow> {
   }
 
   void _showSetting(BuildContext context) {
+    FocusNode focusNode = FocusNode();
+
+    focusNode.addListener(() {
+      print(focusNode.hasFocus);
+    });
+
     final TextEditingController controllerApiKey = TextEditingController();
 
     controllerApiKey.text =
@@ -277,6 +286,9 @@ class _ConversationWindowState extends State<ConversationWindow> {
         BlocProvider.of<UserSettingCubit>(context).state.useStream);
     ValueNotifier isObscureNotifier = ValueNotifier(true);
 
+    ValueNotifier<String> asd =
+        ValueNotifier(BlocProvider.of<UserSettingCubit>(context).state.key);
+
     List<Widget> openAiModelSettings(StateSetter setState) => [
           const SizedBox(
             height: 28,
@@ -284,6 +296,7 @@ class _ConversationWindowState extends State<ConversationWindow> {
           ValueListenableBuilder(
             valueListenable: isObscureNotifier,
             builder: (context, state, child) => TextFormField(
+              focusNode: focusNode,
               controller: controllerApiKey,
               decoration: InputDecoration(
                 labelText: tr('enterKey'),
@@ -309,15 +322,7 @@ class _ConversationWindowState extends State<ConversationWindow> {
               autovalidateMode: AutovalidateMode.always,
               maxLines: 1,
               obscureText: isObscureNotifier.value,
-              onEditingComplete: () {
-                context.read<UserSettingCubit>().setKey(controllerApiKey.text);
-              },
-              onFieldSubmitted: (value) {
-                context.read<UserSettingCubit>().setKey(value);
-              },
-              onSaved: (newValue) {
-                context.read<UserSettingCubit>().setKey(newValue ?? '');
-              },
+              onChanged: (value) => asd.value = value,
             ),
           ),
           const SizedBox(
@@ -361,51 +366,93 @@ class _ConversationWindowState extends State<ConversationWindow> {
           const SizedBox(
             height: 28,
           ),
-          FutureBuilder<List<String>>(
-              future: context.read<ChatGptRepository>().getModels(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState != ConnectionState.done) {
-                  return const CircularProgressIndicator();
-                }
-                return DropdownButtonFormField(
-                    isExpanded: true,
-                    value: BlocProvider.of<UserSettingCubit>(context)
-                        .state
-                        .gptModel,
-                    decoration: InputDecoration(
-                      labelText: tr('gptModel'),
-                      hintText: tr('gptModel'),
-                      floatingLabelBehavior: FloatingLabelBehavior.auto,
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: BorderSide.none,
-                      ),
-                      filled: true,                    
-                    ),
-                    items: snapshot.data!
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: SizedBox(
-                          width: 250,
-                          child: Text(
-                            value,
-                            style: const TextStyle(
-                                overflow: TextOverflow.ellipsis),
-                          ),
+          ValueListenableBuilder(
+              valueListenable: asd,
+              builder: (context, value, child) {
+                print(value.length);
+                if (value.length != 51) {
+                  return DropdownButtonFormField(
+                      isExpanded: true,
+                      value: tr('notExistApiKey'),
+                      decoration: InputDecoration(
+                        labelText: tr('gptModel'),
+                        hintText: tr('gptModel'),
+                        floatingLabelBehavior: FloatingLabelBehavior.auto,
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 8),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide: BorderSide.none,
                         ),
-                      );
-                    }).toList(),
-                    onChanged: (String? newValue) {
-                      if (newValue == null) return;
-                      gptModel = newValue;
+                        filled: true,
+                      ),
+                      items: [
+                        DropdownMenuItem<String>(
+                          value: tr('notExistApiKey'),
+                          child: SizedBox(
+                            width: 250,
+                            child: Text(
+                              tr('notExistApiKey'),
+                              style: const TextStyle(
+                                  fontSize: 15,
+                                  overflow: TextOverflow.ellipsis),
+                            ),
+                          ),
+                        )
+                      ],
+                      onChanged: null);
+                }
+
+                context.read<UserSettingCubit>().apiKeyInit(value);
+
+                return FutureBuilder<List<String>>(
+                    future: context.read<ChatGptRepository>().getModels(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState != ConnectionState.done) {
+                        return const CircularProgressIndicator();
+                      }
+
+                      return DropdownButtonFormField(
+                          isExpanded: true,
+                          value: BlocProvider.of<UserSettingCubit>(context)
+                              .state
+                              .gptModel,
+                          decoration: InputDecoration(
+                            labelText: tr('gptModel'),
+                            hintText: tr('gptModel'),
+                            floatingLabelBehavior: FloatingLabelBehavior.auto,
+                            contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 8),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5),
+                              borderSide: BorderSide.none,
+                            ),
+                            filled: true,
+                          ),
+                          items: snapshot.data!
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: SizedBox(
+                                width: 250,
+                                child: Text(
+                                  value,
+                                  style: const TextStyle(
+                                      overflow: TextOverflow.ellipsis),
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (String? newValue) {
+                            if (newValue == null) return;
+                            gptModel = newValue;
+                          });
                     });
               }),
         ];
 
     showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
         return StatefulBuilder(builder: (context, setState) {
@@ -444,6 +491,14 @@ class _ConversationWindowState extends State<ConversationWindow> {
             actions: [
               TextButton(
                 onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  tr('cancel'),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
                   BlocProvider.of<UserSettingCubit>(context).chagneUserSetting(
                       controllerApiKey.text,
                       froxyUrl,
@@ -452,7 +507,10 @@ class _ConversationWindowState extends State<ConversationWindow> {
 
                   Navigator.pop(context);
                 },
-                child: Text(tr('ok')),
+                child: Text(
+                  tr('save'),
+                  style: const TextStyle(color: Colors.red),
+                ),
               ),
             ],
           );

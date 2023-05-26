@@ -38,6 +38,7 @@ class ChatGptRepository {
   Future<List<String>> getModels() async {
     List<OpenAIModelModel> models = [];
     try {
+      await Future.delayed(const Duration(seconds: 1));
       models = await OpenAI.instance.model.list(); // 지원하는 모델 리스트 가져오기
     } catch (e) {
       log(e.toString());

@@ -10,11 +10,10 @@ class UserSettingCubit extends Cubit<UserSettingState> with HydratedMixin {
 
   UserSettingCubit(this._chatGptRepository)
       : super(UserSettingState(lightTheme, "", "https://api.openai-proxy.com",
-            false, "gpt-3.5-turbo")) {
+            true, "gpt-3.5-turbo")) {
     hydrate();
-
-    // _chatGptRepository.setGptKey(state.key);
-    setKey(state.key);
+    // setKey(state.key);
+    apiKeyInit(state.key);
   }
 
   bool get isDarkMode => state.themeData == darkTheme;
@@ -29,12 +28,16 @@ class UserSettingCubit extends Cubit<UserSettingState> with HydratedMixin {
     ));
   }
 
-  void setKey(String key) {
+  void apiKeyInit(String key) {
     _chatGptRepository.setGptKey(key);
-
-    emit(UserSettingState(
-        state.themeData, key, state.baseUrl, state.useStream, state.gptModel));
   }
+
+  // void setKey(String key) {
+  //   _chatGptRepository.setGptKey(key);
+
+  //   emit(UserSettingState(
+  //       state.themeData, key, state.baseUrl, state.useStream, state.gptModel));
+  // }
 
   void setProxyUrl(String baseUrl) {
     emit(UserSettingState(

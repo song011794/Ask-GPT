@@ -1,7 +1,7 @@
 {
   "appTitle": "ChatGPT",
   "countTimes": "current total count is:",
-  "noConversationTips": "There seems to be no session, click on the left to create one quickly, or simply type prompt to create one",
+  "noConversationTips": "대화 이력이 존재하지 않습니다. 새로운 대화를 생성하십시오.",
   "newConversation": "새로운 대화",
   "renameConversation": "대화 이름 변경",
   "setRenameConversation": "새로운 대화 이름을 입력하세요",
@@ -11,8 +11,8 @@
   "reName": "이름 변경",
   "inputPrompt": "메세지를 입력하세요",
   "inputPromptTips": "ChatGPT에게 질문하세요",
-  "enterKey": "OpenAI API key를 입력하세요",
-  "enterKeyTips": "발급받은 key를 입력하세요",
+  "enterKey": "API key를 입력하세요",
+  "enterKeyTips": "발급받은 Key를 입력하세요",
   "setProxyUrl": "Enter the proxy url",
   "setProxyUrlTips": "프록시 URL을 선택하세요",
   "save": "저장",
@@ -20,5 +20,6 @@
   "cancel": "취소",
   "useStreamApi": "메세지 스트림 사용",
   "gptModel": "GPT모델을 선택하세요",
-  "checkApiKey" : "API Key가 일치하지 않습니다.\n https://platform.openai.com/account/api-keys 에서 Key를 발급해주세요."
+  "checkApiKey": "API Key가 존재하지 않습니다.\n https://platform.openai.com/account/api-keys 에서 Key를 발급해주세요.",
+  "notExistApiKey": "API Key가 존재하지 않습니다"
 }

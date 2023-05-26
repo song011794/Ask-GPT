@@ -20,5 +20,6 @@
   "cancel": "Cancel",
   "useStreamApi": "Use Stream API",
   "gptModel": "Select GPT Model",
-  "checkApiKey" : "The API Key does not match.\nPlease issue a Key at https://platform.openai.com/account/api-keys"
+  "checkApiKey" : "The API Key does not exist.\nPlease issue a Key at https://platform.openai.com/account/api-keys",
+  "notExistApiKey": "The API Key does not exist"
 }
