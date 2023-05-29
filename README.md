@@ -15,3 +15,5 @@
 - [x] Chat
 
 <img src="./artificial/theme.gif" style="width: 80%;">
+
+<img src="./artificial/location.gif" style="width: 80%;">
