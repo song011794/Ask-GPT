@@ -28,4 +28,6 @@
 
 # API Key 입력
 
+<a href="https://platform.openai.com/account/api-keys" target="_blank">OpenAI API Keys</a>
+
 [OpenAI API Keys](https://platform.openai.com/account/api-keys){:target="\_blank"}
