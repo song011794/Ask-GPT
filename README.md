@@ -33,7 +33,8 @@
 
 <img src="./artificial/apikey.gif" style="width: 50%;">
 
-<!-- <img src="./artificial/chat_code.gif" style="width: 50%;"> -->
 
-<video src="./artificial/chat_cod2.webm" controls="controls" >
-</video>
+https://github.com/song011794/Flutter-chat-box/assets/45446457/199792e2-2386-4276-96d9-f5428f24bac1
+
+
+
