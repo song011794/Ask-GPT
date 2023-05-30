@@ -7,8 +7,8 @@
 - [API Key 입력](#api-key-입력)
 - [Completion 기능](#Completion-기능)
 - [Chat 기능](#chat-기능)
-    - [질문하기](##질문하기)
-    - [Code Block](##code-block)
+  - [질문하기](##질문하기)
+  - [Code Block](##code-block)
 
 # 지원 기능
 
@@ -42,9 +42,17 @@
 
 <img src="./artificial/apikey.gif" style="width: 50%;"/>
 
+<<<<<<< HEAD
+
 # Completion 기능
+
 https://github.com/song011794/Flutter-chat-box/assets/45446457/177d57c4-1139-4f93-8334-cbf6fea50864
 
+=======
+
+# Chat 기능
+
+> > > > > > > 6925ab4 (docs : 목차 추가)
 
 # Chat 기능
 
