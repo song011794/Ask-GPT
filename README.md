@@ -42,8 +42,8 @@
 
 <img src="./artificial/apikey.gif" style="width: 50%;"/>
 
-# Chat 기능
-
+# Completion 기능
+https://github.com/song011794/Flutter-chat-box/assets/45446457/177d57c4-1139-4f93-8334-cbf6fea50864
 
 
 # Chat 기능
