@@ -5,9 +5,10 @@
 - [Dark 모드](#dark-모드)
 - [언어 설정](#언어-설정)
 - [API Key 입력](#api-key-입력)
+- [Completion 기능](#Completion-기능)
 - [Chat 기능](#chat-기능)
-  -- [질문하기](##질문하기)
-  -- [Code Block](##code-block)
+    - [질문하기](##질문하기)
+    - [Code Block](##code-block)
 
 # 지원 기능
 
@@ -40,6 +41,10 @@
 > [OpenAI API Keys](https://platform.openai.com/account/api-keys)에서 발급한 API key 입력 </br> > **API key가 일치하지 않을 경우 Model을 선택할 수 없습니다.**
 
 <img src="./artificial/apikey.gif" style="width: 50%;"/>
+
+# Chat 기능
+
+
 
 # Chat 기능
 
