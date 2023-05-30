@@ -38,7 +38,7 @@
 
 # API Key 입력
 
-> [OpenAI API Keys](https://platform.openai.com/account/api-keys)에서 발급한 API key 입력 </br> 
+> [OpenAI API Keys](https://platform.openai.com/account/api-keys)에서 발급한 API key 입력 </br>
 > **API key가 일치하지 않을 경우 Model을 선택할 수 없습니다.**
 
 <img src="./artificial/apikey.gif" style="width: 50%;"/>
@@ -46,8 +46,6 @@
 # Completion 기능
 
 https://github.com/song011794/Flutter-chat-box/assets/45446457/177d57c4-1139-4f93-8334-cbf6fea50864
-
-# Chat 기능
 
 # Chat 기능
 
