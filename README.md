@@ -22,7 +22,7 @@
 
 - [x] Korean
 - [x] English
-- [] Japanese
+- [ ] Japanese
 
 <img src="./artificial/location.gif" style="width: 50%;">
 
