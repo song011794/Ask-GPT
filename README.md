@@ -38,7 +38,8 @@
 
 # API Key 입력
 
-> [OpenAI API Keys](https://platform.openai.com/account/api-keys)에서 발급한 API key 입력 </br> > **API key가 일치하지 않을 경우 Model을 선택할 수 없습니다.**
+> [OpenAI API Keys](https://platform.openai.com/account/api-keys)에서 발급한 API key 입력 </br> 
+> **API key가 일치하지 않을 경우 Model을 선택할 수 없습니다.**
 
 <img src="./artificial/apikey.gif" style="width: 50%;"/>
 
