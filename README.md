@@ -33,6 +33,7 @@
 
 <img src="./artificial/apikey.gif" style="width: 50%;">
 
-<img src="./artificial/chat_code.gif" style="width: 50%;">
+<!-- <img src="./artificial/chat_code.gif" style="width: 50%;"> -->
 
-<video src="./artificial/chat_cod2.webm" controls="controls" style="max-width: 730px;"/>
+<video src="./artificial/chat_cod2.webm" controls="controls" >
+</video>
