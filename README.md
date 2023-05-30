@@ -16,7 +16,9 @@
 
 # Dark 모드
 
-<img src="./artificial/theme.gif" style="width: 50%;"/>
+<p align="center">
+    <img src="./artificial/theme.gif" style="width: 50%;"/>
+</p>
 
 # 언어 변경
 
@@ -24,16 +26,19 @@
 - [x] English
 - [ ] Japanese
 
-<img src="./artificial/location.gif" style="width: 50%;"/>
+<p align="center">
+    <img src="./artificial/location.gif" style="width: 50%;"/>
+</p>
 
 # API Key 입력
 
 > [OpenAI API Keys](https://platform.openai.com/account/api-keys)에서 발급한 API key 입력 </br>
 > API key가 일치하지 않을 경우 Model을 선택할 수 없습니다.
 
-
 <p align="center">
     <img src="./artificial/apikey.gif" style="width: 50%;"/>
 </p>
 
-https://github.com/song011794/Flutter-chat-box/assets/45446457/199792e2-2386-4276-96d9-f5428f24bac1
+<p align="center">
+    https://github.com/song011794/Flutter-chat-box/assets/45446457/199792e2-2386-4276-96d9-f5428f24bac1
+</p>
