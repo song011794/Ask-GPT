@@ -35,4 +35,4 @@
 
 <img src="./artificial/chat_code.gif" style="width: 50%;">
 
-![Sample Video](./artificial/chat_cod2.webm)
+<video src="./artificial/chat_cod2.webm" controls="controls" style="max-width: 730px;"/>
