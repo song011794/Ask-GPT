@@ -7,8 +7,8 @@
 - [API Key 입력](#api-key-입력)
 - [Completion 기능](#Completion-기능)
 - [Chat 기능](#chat-기능)
-  - [질문하기](##질문하기)
-  - [Code Block](##code-block)
+  - [질문하기](#질문하기)
+  - [Code Block](#code-block)
 
 # 지원 기능
 
