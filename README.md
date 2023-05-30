@@ -33,8 +33,6 @@
 
 <img src="./artificial/apikey.gif" style="width: 50%;">
 
-
-
-
 <img src="./artificial/chat_code.gif" style="width: 50%;">
 
+![Sample Video](./artificial/chat_cod2.webm)
