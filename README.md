@@ -1,16 +1,18 @@
 # Flutter ChatGPT
 
-[지원 기능](#지원-기능)
-[지원 모델](#지원-모델)
-[Dark 모드](#dark-모드)
-[언어 설정](#언어-설정)
-[API Key 입력](#api-key-입력)
-[Code Block](#code-block)
+- [지원 기능](#지원-기능)
+- [지원 모델](#지원-모델)
+- [Dark 모드](#dark-모드)
+- [언어 설정](#언어-설정)
+- [API Key 입력](#api-key-입력)
+- [Chat 기능](#chat-기능)
+  -- [질문하기](##질문하기)
+  -- [Code Block](##code-block)
 
 # 지원 기능
 
-- [x] Completion
 - [x] Chat
+- [x] Completion
 
 # 지원 모델
 
@@ -39,6 +41,12 @@
 
 <img src="./artificial/apikey.gif" style="width: 50%;"/>
 
-# Code Block
+# Chat 기능
+
+## 질문하기
+
+<img src="./artificial/chat.gif" style="width: 50%;"/>
+
+## Code Block
 
 https://github.com/song011794/Flutter-chat-box/assets/45446457/199792e2-2386-4276-96d9-f5428f24bac1
