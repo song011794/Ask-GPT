@@ -31,10 +31,8 @@
 > [OpenAI API Keys](https://platform.openai.com/account/api-keys)에서 발급한 API key 입력
 > API key가 일치하지 않을 경우 Model을 선택할 수 없습니다.
 
+<cneter>
 <img src="./artificial/apikey.gif" style="width: 50%;">
-
+</cneter>
 
 https://github.com/song011794/Flutter-chat-box/assets/45446457/199792e2-2386-4276-96d9-f5428f24bac1
-
-
-
