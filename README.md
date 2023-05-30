@@ -14,6 +14,18 @@
 - [x] Completion
 - [x] Chat
 
+# Dark 모드
+
 <img src="./artificial/theme.gif" style="width: 50%;">
 
+# 언어 변경
+
+- [x] Korean
+- [x] English
+- [] Japanese
+
 <img src="./artificial/location.gif" style="width: 50%;">
+
+# API Key 입력
+
+[OpenAI API Keys](https://platform.openai.com/account/api-keys){:target="\_blank"}
