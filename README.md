@@ -1,5 +1,17 @@
 # Flutter ChatGPT
 
+[지원 기능](#지원-기능)
+[지원 모델](#지원-모델)
+[Dark 모드](#dark-모드)
+[언어 설정](#언어-설정)
+[API Key 입력](#api-key-입력)
+[Code Block](#code-block)
+
+# 지원 기능
+
+- [x] Completion
+- [x] Chat
+
 # 지원 모델
 
 - [x] gpt-3.5-turbo
@@ -9,36 +21,24 @@
 - [x] text-curie-001
 - [x] text-ada-001
 
-# 지원 기능
-
-- [x] Completion
-- [x] Chat
-
 # Dark 모드
 
-<p align="center">
-    <img src="./artificial/theme.gif" style="width: 50%;"/>
-</p>
+<img src="./artificial/theme.gif" style="width: 50%;"/>
 
-# 언어 변경
+# 언어 설정
 
 - [x] Korean
 - [x] English
 - [ ] Japanese
 
-<p align="center">
-    <img src="./artificial/location.gif" style="width: 50%;"/>
-</p>
+<img src="./artificial/location.gif" style="width: 50%;"/>
 
 # API Key 입력
 
-> [OpenAI API Keys](https://platform.openai.com/account/api-keys)에서 발급한 API key 입력 </br>
-> API key가 일치하지 않을 경우 Model을 선택할 수 없습니다.
+> [OpenAI API Keys](https://platform.openai.com/account/api-keys)에서 발급한 API key 입력 </br> > **API key가 일치하지 않을 경우 Model을 선택할 수 없습니다.**
 
-<p align="center">
-    <img src="./artificial/apikey.gif" style="width: 50%;"/>
-</p>
+<img src="./artificial/apikey.gif" style="width: 50%;"/>
 
-<p align="center">
-    https://github.com/song011794/Flutter-chat-box/assets/45446457/199792e2-2386-4276-96d9-f5428f24bac1
-</p>
+# Code Block
+
+https://github.com/song011794/Flutter-chat-box/assets/45446457/199792e2-2386-4276-96d9-f5428f24bac1
