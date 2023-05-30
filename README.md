@@ -28,6 +28,13 @@
 
 # API Key 입력
 
-<a href="https://platform.openai.com/account/api-keys" target="_blank">OpenAI API Keys</a>
+> [OpenAI API Keys](https://platform.openai.com/account/api-keys)에서 발급한 API key 입력
+> API key가 일치하지 않을 경우 Model을 선택할 수 없습니다.
 
-[OpenAI API Keys](https://platform.openai.com/account/api-keys){:target="\_blank"}
+<img src="./artificial/apikey.gif" style="width: 50%;">
+
+
+
+
+<img src="./artificial/chat_code.gif" style="width: 50%;">
+
